@@ -4,7 +4,7 @@
     <groupId>de.a9d3.testing</groupId>
     <artifactId>base-test</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
 
     <description>A project that helps you to test your java classes for basic things like getter==setter,
         hashCode and equals. Also provides a convenient to instantiate classes with partially random data</description>
@@ -107,7 +107,7 @@
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
-                        <phase>deploy</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
