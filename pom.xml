@@ -20,6 +20,17 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>scm:git:git://github.com/Mixermachine/base-test.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/Mixermachine/base-test.git</developerConnection>
+        <url>https://github.com/Mixermachine/base-test</url>
+    </scm>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>https://github.com/Mixermachine/base-test/issues</url>
+    </issueManagement>
+
     <developers>
         <developer>
             <id>Mixermachine</id>
