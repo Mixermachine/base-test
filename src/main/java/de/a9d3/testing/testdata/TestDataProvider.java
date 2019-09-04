@@ -1,12 +1,16 @@
 package de.a9d3.testing.testdata;
 
+import de.a9d3.testing.GlobalStatics;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.IntStream;
+import java.util.logging.Logger;
 
 public class TestDataProvider {
+    private static final Logger LOGGER = Logger.getLogger(TestDataProvider.class.getName());
+
     private static final int LIST_ITEM_COUNT = 2;
 
     private Map<String, Function<String, Object>> providerMap;
@@ -59,6 +63,7 @@ public class TestDataProvider {
         if (fun != null) {
             return (T) fun.apply(seed);
         } else {
+            LOGGER.finest("Could not find class in functionMap. Trying to invoke class by constructors.");
             return generateTestDataByNonStandardClass(type, seed, tryComplexConstructorIfPossible);
         }
     }
@@ -69,12 +74,12 @@ public class TestDataProvider {
         } else if (Map.class.isAssignableFrom(x)) {
             return (T) invokeMapInstance(x, seed);
         } else {
-            return  (resolveComplexObject(x, seed, complex));
+            return (resolveComplexObject(x, seed, complex));
         }
     }
 
     private Collection invokeCollectionInstance(Class c, String seed) {
-        Collection instance = null;
+        Collection instance;
 
         // https://static.javatpoint.com/images/java-collection-hierarchy.png
         if (c.equals(List.class) || c.equals(Queue.class)) {
@@ -99,10 +104,10 @@ public class TestDataProvider {
         if (!c.equals(SortedMap.class) && c.equals(Map.class)) {
             instance = new HashMap();
             instance.put(null, null);
-        } else if (c.equals(SortedMap.class) || c.equals(TreeMap.class)){ // TreeMap as it does not allow null values
+        } else if (c.equals(SortedMap.class) || c.equals(TreeMap.class)) { // TreeMap as it does not allow null values
             instance = new TreeMap();
         } else {
-            instance = resolveComplexObject(c, seed,false);
+            instance = resolveComplexObject(c, seed, false);
             instance.put(null, null);
         }
 
@@ -131,10 +136,24 @@ public class TestDataProvider {
                         return (T) single.newInstance(args);
                     }
                 } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                    // suppress exceptions
+                    LOGGER.fine("Could not initialize constructor " + single + " of class " + c.getName() +
+                            ". Trying other constructor if available.");
                 }
             }
         }
+
+        // Could not initialize class
+        StringBuilder message = new StringBuilder();
+        message.append("Could not initialize ");
+        message.append(c.getName());
+
+        if (c.getConstructors().length == 0) {
+            message.append("\nClass has no constructors.\nPlease refer to ");
+            message.append(GlobalStatics.GIT_REPO_MD);
+            message.append(" to get an idea how to use customMaps to initialize the TestDataProvider");
+        }
+        LOGGER.warning(message.toString());
+
 
         return null;
     }
