@@ -32,8 +32,8 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
                             != null;
                 }).collect(Collectors.toList());
 
-        Object a = c.newInstance();
-        Object b = c.newInstance();
+        Object a = provider.fillMutableWithNull(c);
+        Object b = provider.fillMutableWithNull(c);
 
         int iter = 0;
 
@@ -74,7 +74,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
     }
 
     private void executeSetter(Method m, Object o, int iter)
-            throws IllegalAccessException, InstantiationException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException {
         m.invoke(o, (Object) provider.fill(m.getParameterTypes()[0], "f50c83cf-5b60-4b2b-a869-b99bb0d130b9" + iter,
                 false));
     }

@@ -1,9 +1,11 @@
 package de.a9d3.testing.testdata;
 
 import de.a9d3.testing.GlobalStatics;
+import de.a9d3.testing.method_extractor.GetterIsSetterExtractor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
@@ -72,13 +74,13 @@ public class TestDataProvider {
         }
     }
 
-    public <T> T generateTestDataByNonStandardClass(Class x, String seed, Boolean complex) {
-        if (Collection.class.isAssignableFrom(x)) {
-            return (T) invokeCollectionInstance(x, seed);
-        } else if (Map.class.isAssignableFrom(x)) {
-            return (T) invokeMapInstance(x, seed);
+    public <T> T generateTestDataByNonStandardClass(Class c, String seed, Boolean complex) {
+        if (Collection.class.isAssignableFrom(c)) {
+            return (T) invokeCollectionInstance(c, seed);
+        } else if (Map.class.isAssignableFrom(c)) {
+            return (T) invokeMapInstance(c, seed);
         } else {
-            return (resolveComplexObject(x, seed, complex));
+            return (resolveComplexObject(c, seed, complex));
         }
     }
 
@@ -160,5 +162,17 @@ public class TestDataProvider {
 
 
         return null;
+    }
+
+    public <T> T fillMutableWithNull(Class c) throws IllegalAccessException, InvocationTargetException {
+        Object instance = fill(c, "123", false);
+
+        for (Method method : GetterIsSetterExtractor.getSetter(c)) {
+            if (!method.getParameterTypes()[0].isPrimitive()) {
+                method.invoke(instance, new Object[]{null});
+            }
+        }
+
+        return (T) instance;
     }
 }
