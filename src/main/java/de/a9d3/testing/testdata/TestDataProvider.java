@@ -3,6 +3,7 @@ package de.a9d3.testing.testdata;
 import de.a9d3.testing.GlobalStatics;
 import de.a9d3.testing.method_extractor.GetterIsSetterExtractor;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
 public class TestDataProvider {
     private static final Logger LOGGER = Logger.getLogger(TestDataProvider.class.getName());
 
-    private static final int LIST_ITEM_COUNT = 2;
+    protected static final int LIST_ARRAY_ITEM_COUNT = 2;
 
     private Map<String, Function<String, Object>> providerMap;
 
@@ -79,6 +80,13 @@ public class TestDataProvider {
             return (T) invokeCollectionInstance(c, seed);
         } else if (Map.class.isAssignableFrom(c)) {
             return (T) invokeMapInstance(c, seed);
+        } else if (c.isArray()) {
+            Object objects = Array.newInstance(c.getComponentType(), LIST_ARRAY_ITEM_COUNT);
+            for (int i = 0; i < Array.getLength(objects); i++) {
+                Array.set(objects, i, fill(c.getComponentType(), seed + i, false));
+            }
+
+            return (T) objects;
         } else {
             return (resolveComplexObject(c, seed, complex));
         }
@@ -96,7 +104,7 @@ public class TestDataProvider {
             instance = resolveComplexObject(c, seed, false);
         }
 
-        for (int i = 0; i < LIST_ITEM_COUNT; i++) {
+        for (int i = 0; i < LIST_ARRAY_ITEM_COUNT; i++) {
             instance.add(null);
         }
 
@@ -168,8 +176,8 @@ public class TestDataProvider {
      * This method will initialize the provided class with null pointer for the mutable variables and random
      * values for the immutable variables (can't be null)
      *
-     * @param c
-     * @param <T>
+     * @param c Class which should be initialized
+     * @param <T> Return type
      * @return Initialized class
      * @throws IllegalAccessException
      * @throws InvocationTargetException

@@ -28,7 +28,6 @@ public class TestDataProviderTest {
     @Test
     public void booleanTest() {
         boolean pBool = provider.fill(boolean.class, "123", false); // should be false
-        assertNotNull(pBool);
 
         assertEquals(pBool, provider.fill(boolean.class, "123", false)); // idempotency
 
@@ -134,9 +133,8 @@ public class TestDataProviderTest {
     private void testManyIfNotNull(Class c) {
         AtomicBoolean positive = new AtomicBoolean(true);
 
-        IntStream.range(0, TestDataProviderTest.MANY_ITERATIONS_QUANTITY).forEach(integer -> {
-            assertNotNull(provider.fill(c, integer + "", false));
-        });
+        IntStream.range(0, TestDataProviderTest.MANY_ITERATIONS_QUANTITY).forEach(integer ->
+                assertNotNull(provider.fill(c, integer + "", false)));
 
         assertTrue(positive.get());
     }
@@ -147,7 +145,7 @@ public class TestDataProviderTest {
         stringList = provider.generateTestDataByNonStandardClass(stringList.getClass(), "123", false);
 
         assertNotNull(stringList);
-        assertEquals(2, stringList.size());
+        assertEquals(TestDataProvider.LIST_ARRAY_ITEM_COUNT, stringList.size());
     }
 
     @Test
@@ -157,6 +155,23 @@ public class TestDataProviderTest {
 
         assertNotNull(map);
         assertEquals(1, map.size());
+    }
+
+    @Test
+    public void byteArrayTest() {
+        Byte[] bytes = new Byte[0];
+        bytes = provider.fill(bytes.getClass(), "123", false);
+
+        assertNotNull(bytes);
+        assertEquals(TestDataProvider.LIST_ARRAY_ITEM_COUNT, bytes.length);
+    }
+
+    @Test
+    public void intArrayTest() {
+        int[] ints = new int[0];
+        ints = provider.fill(ints.getClass(), "123", false);
+
+        assertNotNull(ints);
     }
 
     @Test
