@@ -19,7 +19,6 @@ public class TestDataProvider {
 
     private Map<String, Function<String, Object>> providerMap;
 
-
     /**
      * This class will invoke classes with random data
      */
