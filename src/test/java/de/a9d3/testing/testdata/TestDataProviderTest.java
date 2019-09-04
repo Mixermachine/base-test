@@ -5,6 +5,7 @@ import de.a9d3.testing.resource_classes.TestDataProviderTestClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void booleanTest() throws IllegalAccessException, InstantiationException {
+    public void booleanTest() {
         boolean pBool = provider.fill(boolean.class, "123", false); // should be false
         assertNotNull(pBool);
 
@@ -47,7 +48,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void charTest() throws IllegalAccessException, InstantiationException {
+    public void charTest() {
         provider.fill(char.class, "123", false); // should not throw
 
         Character npChar = provider.fill(Character.class, "123", false);
@@ -58,7 +59,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void byteTest() throws IllegalAccessException, InstantiationException {
+    public void byteTest() {
         provider.fill(byte.class, "123", false); // should not throw
 
         Byte npByte = provider.fill(Byte.class, "123", false);
@@ -69,7 +70,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void shortTest() throws IllegalAccessException, InstantiationException {
+    public void shortTest() {
         provider.fill(short.class, "123", false); // should not throw
 
         Short npShort = provider.fill(Short.class, "123", false);
@@ -80,7 +81,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void intTest() throws IllegalAccessException, InstantiationException {
+    public void intTest() {
         provider.fill(int.class, "123", false);
 
         Integer npInteger = provider.fill(Integer.class, "123", false);
@@ -91,7 +92,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void longTest() throws IllegalAccessException, InstantiationException {
+    public void longTest() {
         provider.fill(long.class, "123", false);
 
         Long npLong = provider.fill(Long.class, "123", false);
@@ -102,7 +103,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void floatTest() throws IllegalAccessException, InstantiationException {
+    public void floatTest() {
         provider.fill(float.class, "123", false);
 
         Float npFloat = provider.fill(Float.class, "123", false);
@@ -113,7 +114,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void doubleTest() throws IllegalAccessException, InstantiationException {
+    public void doubleTest() {
         provider.fill(double.class, "123", false);
 
         Double npDouble = provider.fill(Double.class, "123", false);
@@ -121,6 +122,13 @@ public class TestDataProviderTest {
 
         testManyIfNotNull(double.class);
         testManyIfNotNull(Double.class);
+    }
+
+    @Test
+    public void instantTest() {
+        Instant instant = provider.fill(Instant.class, "123", false);
+
+        assertNotNull(instant);
     }
 
     private void testManyIfNotNull(Class c) {
@@ -134,7 +142,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void generateTestDataByClassListTest() throws InstantiationException, IllegalAccessException {
+    public void generateTestDataByClassListTest() {
         List<String> stringList = new ArrayList<>();
         stringList = provider.generateTestDataByNonStandardClass(stringList.getClass(), "123", false);
 
@@ -143,7 +151,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void generateTestDataByClassMapTest() throws InstantiationException, IllegalAccessException {
+    public void generateTestDataByClassMapTest() {
         HashMap map = new HashMap<>();
         map = provider.generateTestDataByNonStandardClass(map.getClass(), "123", false);
 
@@ -152,7 +160,7 @@ public class TestDataProviderTest {
     }
 
     @Test
-    public void generateTestDataByClassVariousClassTest() throws IllegalAccessException, InstantiationException {
+    public void generateTestDataByClassVariousClassTest() {
         // Using random existing class
         Thread instance = provider.fill(Thread.class, "123", false);
         assertNotNull(instance);

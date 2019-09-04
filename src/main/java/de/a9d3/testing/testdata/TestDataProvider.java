@@ -4,6 +4,7 @@ import de.a9d3.testing.GlobalStatics;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Logger;
@@ -54,6 +55,9 @@ public class TestDataProvider {
         map.put(Double.class.getName(), map.get(double.class.getName()));
 
         map.put(String.class.getName(), x -> UUID.nameUUIDFromBytes(x.getBytes()).toString());
+
+        // Other classes
+        map.put(Instant.class.getName(), x -> Instant.ofEpochSecond(x.hashCode()));
 
         return map;
     }
