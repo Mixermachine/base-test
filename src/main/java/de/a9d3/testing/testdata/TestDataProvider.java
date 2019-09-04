@@ -41,7 +41,7 @@ public class TestDataProvider {
     /**
      * This method defines the default functions which generate random values for the corresponding classes
      *
-     * @return A map with key (string), value(Function<String, Object>)
+     * @return A map with key (string), {@literal (value(Function<String, Object>))}
      */
     public static Map<String, Function<String, Object>> getDefaultProviderMap() {
         Map<String, Function<String, Object>> map = new HashMap<>();
@@ -86,7 +86,7 @@ public class TestDataProvider {
      * @param seed                            The seed which should be used to generate the constructor parameters
      * @param tryComplexConstructorIfPossible If true, try largest constructor first
      * @param <T>                             Return type
-     * @return
+     * @return Initialized object
      */
     public <T> T fill(Class c, String seed, Boolean tryComplexConstructorIfPossible) {
         Function<String, Object> fun = providerMap.get(c.getName());
@@ -199,7 +199,7 @@ public class TestDataProvider {
      * This method will initialize the provided class with null pointer for the mutable variables and random
      * values for the immutable variables (can't be null)
      *
-     * @param c Class which should be initialized
+     * @param c   Class which should be initialized
      * @param <T> Return type
      * @return Initialized class
      * @throws IllegalAccessException
