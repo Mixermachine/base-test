@@ -1,11 +1,11 @@
 package de.a9d3.testing.checker;
 
-import de.a9d3.testing.testdata.TestDataProvider;
 import de.a9d3.testing.checker.exception.MismatchException;
 import de.a9d3.testing.method.GetterSetterMatcher;
 import de.a9d3.testing.method.IsSetterMatcher;
 import de.a9d3.testing.method.MethodMatcherInterface;
 import de.a9d3.testing.method.MethodTuple;
+import de.a9d3.testing.testdata.TestDataProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -24,6 +24,10 @@ public class GetterIsSetterCheck implements CheckerInterface {
 
     public GetterIsSetterCheck(String regexExcluded) {
         this(new TestDataProvider(), regexExcluded);
+    }
+
+    public GetterIsSetterCheck(TestDataProvider provider) {
+        this(provider, "");
     }
 
     public GetterIsSetterCheck(TestDataProvider provider, String regexExcluded) {
