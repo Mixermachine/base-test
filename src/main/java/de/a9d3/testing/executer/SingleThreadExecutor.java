@@ -6,11 +6,13 @@ import de.a9d3.testing.executer.exception.CheckerFailedException;
 
 import java.util.List;
 
-public class SingleThreadExecutor {
+public class SingleThreadExecutor implements Executor {
     public Boolean execute(Class c, List<CheckerInterface> checkers) {
         for (CheckerInterface checker : checkers) {
             try {
-                checker.check(c);
+                if (!checker.check(c)) {
+                    throw new CheckerFailedException(checker);
+                }
             } catch (ReflectiveOperationException | MismatchException e) {
                 throw new CheckerFailedException(checker, e);
             }
