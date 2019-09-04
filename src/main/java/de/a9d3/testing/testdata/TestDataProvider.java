@@ -19,16 +19,29 @@ public class TestDataProvider {
 
     private Map<String, Function<String, Object>> providerMap;
 
+    /**
+     * This class will invoke classes with random data
+     */
     public TestDataProvider() {
         this(Collections.emptyMap());
     }
 
+    /**
+     * This class will invoke classes with random data from a custom map
+     *
+     * @param customMap The elements in this map will override the keys of the default map
+     */
     public TestDataProvider(Map<String, Function<String, Object>> customMap) {
         providerMap = getDefaultProviderMap();
 
         providerMap.putAll(customMap);
     }
 
+    /**
+     * This method defines the default functions which generate random values for the corresponding classes
+     *
+     * @return A map with key (string), {@literal (value(Function<String, Object>))}
+     */
     public static Map<String, Function<String, Object>> getDefaultProviderMap() {
         Map<String, Function<String, Object>> map = new HashMap<>();
 
@@ -65,17 +78,26 @@ public class TestDataProvider {
         return map;
     }
 
-    public <T> T fill(Class type, String seed, Boolean tryComplexConstructorIfPossible) {
-        Function<String, Object> fun = providerMap.get(type.getName());
+    /**
+     * This method will try to invoke the provided class.
+     *
+     * @param c                               The class which should be invoked
+     * @param seed                            The seed which should be used to generate the constructor parameters
+     * @param tryComplexConstructorIfPossible If true, try largest constructor first
+     * @param <T>                             Return type
+     * @return Initialized object
+     */
+    public <T> T fill(Class c, String seed, Boolean tryComplexConstructorIfPossible) {
+        Function<String, Object> fun = providerMap.get(c.getName());
         if (fun != null) {
             return (T) fun.apply(seed);
         } else {
             LOGGER.finest("Could not find class in functionMap. Trying to invoke class by constructors.");
-            return generateTestDataByNonStandardClass(type, seed, tryComplexConstructorIfPossible);
+            return generateTestDataByNonStandardClass(c, seed, tryComplexConstructorIfPossible);
         }
     }
 
-    public <T> T generateTestDataByNonStandardClass(Class c, String seed, Boolean complex) {
+    protected <T> T generateTestDataByNonStandardClass(Class c, String seed, Boolean complex) {
         if (Collection.class.isAssignableFrom(c)) {
             return (T) invokeCollectionInstance(c, seed);
         } else if (Map.class.isAssignableFrom(c)) {
@@ -88,7 +110,7 @@ public class TestDataProvider {
 
             return (T) objects;
         } else {
-            return (resolveComplexObject(c, seed, complex));
+            return resolveComplexObject(c, seed, complex);
         }
     }
 
@@ -176,7 +198,7 @@ public class TestDataProvider {
      * This method will initialize the provided class with null pointer for the mutable variables and random
      * values for the immutable variables (can't be null)
      *
-     * @param c Class which should be initialized
+     * @param c   Class which should be initialized
      * @param <T> Return type
      * @return Initialized class
      * @throws IllegalAccessException
