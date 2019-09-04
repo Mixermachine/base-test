@@ -164,6 +164,16 @@ public class TestDataProvider {
         return null;
     }
 
+    /**
+     * This method will initialize the provided class with null pointer for the mutable variables and random
+     * values for the immutable variables (can't be null)
+     *
+     * @param c
+     * @param <T>
+     * @return Initialized class
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
     public <T> T fillMutableWithNull(Class c) throws IllegalAccessException, InvocationTargetException {
         Object instance = fill(c, "123", false);
 
