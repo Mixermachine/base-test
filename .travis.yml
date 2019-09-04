@@ -1,5 +1,9 @@
 language: java
 dist: xenial
+os:
+  - windows
+  - linux
+  - osx
 jdk:
   - oraclejdk11
   - openjdk8
