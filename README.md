@@ -11,6 +11,8 @@ Simply execute fill(*yourClass*, true) on an object of the class TestDataProvide
 
 The main concern of this project is to be easy to use and lightweight.
 To meet the second goal no external libraries are used and all functionality stems from Java reflections.
+
+[![Travis build](https://api.travis-ci.com/Mixermachine/base-test.svg?branch=master)](https://travis-ci.com/Mixermachine/base-test)<br/>
 The project is tested on three environments (oraclejdk11, openjdk8, openjdk11 all on Travis Ubuntu Bionic).
 
 ## Checkers
