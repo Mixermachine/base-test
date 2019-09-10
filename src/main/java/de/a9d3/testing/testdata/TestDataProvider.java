@@ -201,8 +201,8 @@ public class TestDataProvider {
      * @param c   Class which should be initialized
      * @param <T> Return type
      * @return Initialized class
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @throws IllegalAccessException is thrown if the access to the class, field, method or constructor is not allowed.
+     * @throws InvocationTargetException is thrown when the called method throws an exception.
      */
     public <T> T fillMutableWithNull(Class c) throws IllegalAccessException, InvocationTargetException {
         Object instance = fill(c, "123", false);
