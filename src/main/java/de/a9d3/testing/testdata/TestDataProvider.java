@@ -11,7 +11,12 @@ import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
+// yes unchecked casts from Object to T (T being the target class are done in this class)
+// I have not found a better way to do it.
+// If you know a better way, do not hesitate to write an issue on GlobalStatics.GIT_REPO
+@SuppressWarnings("unchecked")
 public class TestDataProvider {
     private static final Logger LOGGER = Logger.getLogger(TestDataProvider.class.getName());
 
@@ -87,7 +92,7 @@ public class TestDataProvider {
      * @param <T>                             Return type
      * @return Initialized object
      */
-    public <T> T fill(Class c, String seed, Boolean tryComplexConstructorIfPossible) {
+    public <T> T fill(Class c, String seed, boolean tryComplexConstructorIfPossible) {
         Function<String, Object> fun = providerMap.get(c.getName());
         if (fun != null) {
             return (T) fun.apply(seed);
@@ -97,7 +102,7 @@ public class TestDataProvider {
         }
     }
 
-    protected <T> T generateTestDataByNonStandardClass(Class c, String seed, Boolean complex) {
+    protected <T> T generateTestDataByNonStandardClass(Class c, String seed, boolean complex) {
         if (Collection.class.isAssignableFrom(c)) {
             return (T) invokeCollectionInstance(c, seed);
         } else if (Map.class.isAssignableFrom(c)) {
@@ -126,15 +131,17 @@ public class TestDataProvider {
             instance = resolveComplexObject(c, seed, false);
         }
 
-        for (int i = 0; i < LIST_ARRAY_ITEM_COUNT; i++) {
-            instance.add(null);
+        if (instance != null) {
+            for (int i = 0; i < LIST_ARRAY_ITEM_COUNT; i++) {
+                instance.add(null);
+            }
         }
 
         return instance;
     }
 
     private Map invokeMapInstance(Class c, String seed) {
-        Map instance = null;
+        Map instance;
 
         // https://static.javatpoint.com/images/core/java-map-hierarchy.png
         if (!c.equals(SortedMap.class) && c.equals(Map.class)) {
@@ -144,35 +151,32 @@ public class TestDataProvider {
             instance = new TreeMap();
         } else {
             instance = resolveComplexObject(c, seed, false);
-            instance.put(null, null);
+
+            if (instance != null) {
+                instance.put(null, null);
+            }
         }
 
         return instance;
     }
 
-    private <T> T resolveComplexObject(Class c, String seed, Boolean tryComplexConstructor) {
+    private <T> T resolveComplexObject(Class c, String seed, boolean tryComplexConstructor) {
         Constructor[] constructors = c.getConstructors();
-        if (tryComplexConstructor) {
-            Arrays.sort(constructors, Comparator.comparingInt(con -> -con.getParameterCount()));
-        } else {
-            Arrays.sort(constructors, Comparator.comparingInt(Constructor::getParameterCount));
-        }
+        Arrays.sort(constructors, tryComplexConstructor ? // tryComplexConstructor determines the sorted order
+                Comparator.comparingInt(con -> -con.getParameterCount()) :
+                Comparator.comparingInt(Constructor::getParameterCount));
 
-        for (Constructor single : constructors) {
-            if (Arrays.stream(single.getParameterTypes()).noneMatch(aClass -> aClass.equals(c))) {
+        for (Constructor constructor : constructors) {
+            if (Arrays.stream(constructor.getParameterTypes()).noneMatch(aClass -> aClass.equals(c))) {
                 try {
-                    Object[] args = new Object[single.getParameterCount()];
-                    for (int i = 0; i < single.getParameterCount(); i++) {
-                        args[i] = fill(single.getParameterTypes()[i], seed + i, tryComplexConstructor);
-                    }
+                    // try create a arguments array which can be used to invoke the constructor
+                    Object[] args = IntStream.range(0, constructor.getParameterCount())
+                            .mapToObj(i -> fill(constructor.getParameterTypes()[i], seed + i, tryComplexConstructor))
+                            .toArray();
 
-                    if (args.length == 0) {
-                        return (T) single.newInstance();
-                    } else {
-                        return (T) single.newInstance(args);
-                    }
+                    return (T) (args.length == 0 ? constructor.newInstance() : constructor.newInstance(args));
                 } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                    LOGGER.fine("Could not initialize constructor " + single + " of class " + c.getName() +
+                    LOGGER.fine("Could not initialize constructor " + constructor + " of class " + c.getName() +
                             ". Trying other constructor if available.");
                 }
             }
@@ -188,8 +192,8 @@ public class TestDataProvider {
             message.append(GlobalStatics.GIT_REPO_MD);
             message.append(" to get an idea how to use customMaps to initialize the TestDataProvider");
         }
-        LOGGER.warning(message.toString());
 
+        LOGGER.warning(message::toString);
 
         return null;
     }
@@ -209,7 +213,7 @@ public class TestDataProvider {
 
         for (Method method : GetterIsSetterExtractor.getSetter(c)) {
             if (!method.getParameterTypes()[0].isPrimitive()) {
-                method.invoke(instance, new Object[]{null});
+                method.invoke(instance, new Object[1]);
             }
         }
 

@@ -1,12 +1,11 @@
 package de.a9d3.testing.checker;
 
-import de.a9d3.testing.checker.exception.MismatchException;
 import de.a9d3.testing.resource_classes.DefensiveCopyingCheckMutableTestClass;
 import de.a9d3.testing.resource_classes.DefensiveCopyingCheckOnlyImmutableTestClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class DefensiveCopyingCheckTest {
 
@@ -18,12 +17,12 @@ public class DefensiveCopyingCheckTest {
     }
 
     @Test
-    public void positiveOnlyImmutableTest() throws MismatchException, ReflectiveOperationException {
+    public void positiveOnlyImmutableTest() throws ReflectiveOperationException {
         assertTrue(checker.check(DefensiveCopyingCheckOnlyImmutableTestClass.class));
     }
 
     @Test
-    public void positiveMutable() throws MismatchException, ReflectiveOperationException {
+    public void positiveMutable() throws ReflectiveOperationException {
         assertTrue(checker.check(DefensiveCopyingCheckMutableTestClass.class));
     }
 }

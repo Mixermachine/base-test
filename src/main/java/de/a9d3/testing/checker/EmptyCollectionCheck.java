@@ -7,8 +7,10 @@ import de.a9d3.testing.testdata.TestDataProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class EmptyCollectionCheck implements CheckerInterface {
+    private static final Logger LOGGER = Logger.getLogger(EmptyCollectionCheck.class.getName());
 
     private TestDataProvider provider;
 
@@ -30,7 +32,8 @@ public class EmptyCollectionCheck implements CheckerInterface {
                     try {
                         return getter.invoke(instance) == null;
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+                        LOGGER.warning("Received following exception while checking getter " + getter.getName() +
+                                ". Exception " + e.getMessage());
                     }
 
                     return true;

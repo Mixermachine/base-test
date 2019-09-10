@@ -5,13 +5,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GetterIsSetterExtractor extends MethodExtractor{
+public class GetterIsSetterExtractor {
+    private GetterIsSetterExtractor() {
+        // should not be invoke for now
+    }
+
     public static List<Method>  getGetter(Class c) {
-        return extract(c, "^get");
+        return MethodExtractor.extract(c, "^get");
     }
 
     public static List<Method> getIs(Class c) {
-        return extract(c, "^is");
+        return MethodExtractor.extract(c, "^is");
     }
 
     public static List<Method> getGetterAndIs(Class c) {
@@ -19,6 +23,6 @@ public class GetterIsSetterExtractor extends MethodExtractor{
     }
 
     public static List<Method> getSetter(Class c) {
-        return extract(c, "^set");
+        return MethodExtractor.extract(c, "^set");
     }
 }

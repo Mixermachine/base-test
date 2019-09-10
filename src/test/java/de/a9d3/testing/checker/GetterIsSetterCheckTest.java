@@ -6,7 +6,7 @@ import de.a9d3.testing.resource_classes.GetterIsSetterCheckPositiveTestClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class GetterIsSetterCheckTest {
 
@@ -19,13 +19,13 @@ public class GetterIsSetterCheckTest {
 
     @Test
     public void positiveTest()
-            throws ReflectiveOperationException, MismatchException {
+            throws ReflectiveOperationException {
         assertTrue(check.check(GetterIsSetterCheckPositiveTestClass.class));
 
     }
 
     @Test(expected = MismatchException.class)
-    public void negativeTest() throws ReflectiveOperationException, MismatchException {
+    public void negativeTest() throws ReflectiveOperationException {
         check.check(GetterIsSetterCheckNegativeTestClass.class);
     }
 }
