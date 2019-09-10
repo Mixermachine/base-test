@@ -1,0 +1,1 @@
+mvn gpg.skip=false release:perform
