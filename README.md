@@ -1,4 +1,4 @@
-# base-test
+# base-test &middot; [![Travis build](https://api.travis-ci.com/Mixermachine/base-test.svg?branch=master)](https://travis-ci.com/Mixermachine/base-test) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Mixermachine_base-test&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mixermachine_base-test)
 
 This project can perform some basic checks for your Java project so you don't have to, making it possible to reach a 100% test coverage.
 
@@ -12,7 +12,7 @@ Simply execute fill(*yourClass*, true) on an object of the class TestDataProvide
 The main concern of this project is to be easy to use and lightweight.
 To meet the second goal no external libraries are used and all functionality stems from Java reflections.
 
-[![Travis build](https://api.travis-ci.com/Mixermachine/base-test.svg?branch=master)](https://travis-ci.com/Mixermachine/base-test)<br/>
+<br/>
 The project is tested on three environments (oraclejdk11, openjdk8, openjdk11 all on Travis Ubuntu Bionic).
 
 ## Checkers
