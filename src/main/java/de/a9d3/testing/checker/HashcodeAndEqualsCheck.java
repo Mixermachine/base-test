@@ -26,11 +26,8 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
     public boolean check(Class c)
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         List<Method> setterList = GetterIsSetterExtractor.getSetter(c).stream()
-                .filter(setter -> {
-                    // try to generate data for each setter, filter out that do not work
-                    return provider.fill(setter.getParameterTypes()[0], "123", false)
-                            != null;
-                }).collect(Collectors.toList());
+                // try to generate data for each setter, filter out which do not work
+                .filter(this::filterForFillableData).collect(Collectors.toList());
 
         Object a = provider.fillMutableWithNull(c);
         Object b = provider.fillMutableWithNull(c);
@@ -77,5 +74,9 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
             throws IllegalAccessException, InvocationTargetException {
         m.invoke(o, (Object) provider.fill(m.getParameterTypes()[0], "f50c83cf-5b60-4b2b-a869-b99bb0d130b9" + iter,
                 false));
+    }
+
+    private boolean filterForFillableData(Method setter) {
+        return provider.fill(setter.getParameterTypes()[0], "123", false) != null;
     }
 }

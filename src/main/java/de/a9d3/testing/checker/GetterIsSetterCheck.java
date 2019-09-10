@@ -42,7 +42,7 @@ public class GetterIsSetterCheck implements CheckerInterface {
 
     @Override
     public boolean check(Class c)
-            throws ReflectiveOperationException, MismatchException {
+            throws ReflectiveOperationException {
         MethodMatcherInterface getterSetterMatcher = new GetterSetterMatcher();
         MethodMatcherInterface isSetterMatcher = new IsSetterMatcher();
 
@@ -58,7 +58,7 @@ public class GetterIsSetterCheck implements CheckerInterface {
     }
 
     public boolean check(Class c, List<MethodTuple> tuples)
-            throws IllegalAccessException, InvocationTargetException, MismatchException {
+            throws IllegalAccessException, InvocationTargetException {
         Object instance = provider.fill(c, "test", true);
 
         for (int i = 0; i < tuples.size(); i++) {

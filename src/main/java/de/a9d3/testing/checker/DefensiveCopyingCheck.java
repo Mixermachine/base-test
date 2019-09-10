@@ -6,9 +6,12 @@ import de.a9d3.testing.method.MethodMatcherInterface;
 import de.a9d3.testing.testdata.TestDataProvider;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class DefensiveCopyingCheck implements CheckerInterface {
+    private static final Logger LOGGER = Logger.getLogger(DefensiveCopyingCheck.class.getName());
+
     private TestDataProvider provider;
 
     public DefensiveCopyingCheck() {
@@ -43,7 +46,8 @@ public class DefensiveCopyingCheck implements CheckerInterface {
                             return data == tuple.getA().invoke(a);
                         }
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+                        LOGGER.warning("Received following exception while checking tuple " + tuple.toString() +
+                                ". Exception " + e.getMessage());
                     }
 
                     return true;

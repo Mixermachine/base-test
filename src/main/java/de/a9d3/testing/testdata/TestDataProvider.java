@@ -87,7 +87,7 @@ public class TestDataProvider {
      * @param <T>                             Return type
      * @return Initialized object
      */
-    public <T> T fill(Class c, String seed, Boolean tryComplexConstructorIfPossible) {
+    public <T> T fill(Class c, String seed, boolean tryComplexConstructorIfPossible) {
         Function<String, Object> fun = providerMap.get(c.getName());
         if (fun != null) {
             return (T) fun.apply(seed);
@@ -97,7 +97,7 @@ public class TestDataProvider {
         }
     }
 
-    protected <T> T generateTestDataByNonStandardClass(Class c, String seed, Boolean complex) {
+    protected <T> T generateTestDataByNonStandardClass(Class c, String seed, boolean complex) {
         if (Collection.class.isAssignableFrom(c)) {
             return (T) invokeCollectionInstance(c, seed);
         } else if (Map.class.isAssignableFrom(c)) {
@@ -150,7 +150,7 @@ public class TestDataProvider {
         return instance;
     }
 
-    private <T> T resolveComplexObject(Class c, String seed, Boolean tryComplexConstructor) {
+    private <T> T resolveComplexObject(Class c, String seed, boolean tryComplexConstructor) {
         Constructor[] constructors = c.getConstructors();
         if (tryComplexConstructor) {
             Arrays.sort(constructors, Comparator.comparingInt(con -> -con.getParameterCount()));
@@ -209,7 +209,7 @@ public class TestDataProvider {
 
         for (Method method : GetterIsSetterExtractor.getSetter(c)) {
             if (!method.getParameterTypes()[0].isPrimitive()) {
-                method.invoke(instance, new Object[]{null});
+                method.invoke(instance, new Object[1]);
             }
         }
 
