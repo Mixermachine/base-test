@@ -24,7 +24,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
 
     @Override
     public boolean check(Class c)
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+            throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         List<Method> setterList = GetterIsSetterExtractor.getSetter(c).stream()
                 // try to generate data for each setter, filter out which do not work
                 .filter(this::filterForFillableData).collect(Collectors.toList());
@@ -41,14 +41,26 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
         for (Method mySetter : setterList) {
             executeSetter(mySetter, a, iter);
 
-            // should not equal
+            // Check same object
+            if (!(areEqual(a, a))) {
+                return false;
+            }
+
+            // Check different class. Guarantee to always use a different class
+            // Nothing special about String, it's just not Object
+            if (areEqual(a, mySetter.getParameterTypes()[0].equals(Object.class) ? String.class : Object.class)) {
+                return false;
+            }
+
+            // Should not equal
             if (areEqual(a, b) || haveEqualHashCode(c, a, b)) {
                 return false;
             }
 
+            // Set setter in second object
             executeSetter(mySetter, b, iter);
 
-            // should equal
+            // Should equal
             if (!areEqual(a, b) || !haveEqualHashCode(c, a, b)) {
                 return false;
             }
@@ -72,8 +84,17 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
 
     private void executeSetter(Method m, Object o, int iter)
             throws IllegalAccessException, InvocationTargetException {
-        m.invoke(o, (Object) provider.fill(m.getParameterTypes()[0], "f50c83cf-5b60-4b2b-a869-b99bb0d130b9" + iter,
-                false));
+        Object input;
+
+        if (m.getParameterTypes()[0].equals(boolean.class)) {
+            // always set true as default for boolean is false
+            input = true;
+        } else {
+            input = provider.fill(m.getParameterTypes()[0], "f50c83cf-5b60-4b2b-a869-b99bb0d130b9" + iter,
+                    false);
+        }
+
+        m.invoke(o, input);
     }
 
     private boolean filterForFillableData(Method setter) {
