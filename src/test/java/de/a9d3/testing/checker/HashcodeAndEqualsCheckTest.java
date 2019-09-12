@@ -1,9 +1,6 @@
 package de.a9d3.testing.checker;
 
-import de.a9d3.testing.resource_classes.HashCodeAndEqualsCheckBooleanTestClass;
-import de.a9d3.testing.resource_classes.HashCodeAndEqualsCheckNegativeFirstTestClass;
-import de.a9d3.testing.resource_classes.HashCodeAndEqualsCheckNegativeSecondTestClass;
-import de.a9d3.testing.resource_classes.HashCodeAndEqualsCheckPositiveTestClass;
+import de.a9d3.testing.resource_classes.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +8,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class HashcodeAndEqualsCheckTest {
-    CheckerInterface checker;
+    private CheckerInterface checker;
 
     @Before
     public void setup() {
@@ -39,4 +36,13 @@ public class HashcodeAndEqualsCheckTest {
         assertTrue(checker.check(HashCodeAndEqualsCheckBooleanTestClass.class));
     }
 
+    @Test
+    public void sameObjectTest() throws ReflectiveOperationException {
+        assertFalse(checker.check(HashCodeAndEqualsCheckSameObjectTestClass.class));
+    }
+
+    @Test
+    public void differentClassTest() throws ReflectiveOperationException {
+        assertFalse(checker.check(HashCodeAndEqualsCheckDifferentClassTestClass.class));
+    }
 }
