@@ -41,3 +41,29 @@ This class will compare the pointers of return/parameter values of the getter/is
 ### PublicVariableCheck
 On the same note, a public variable allows for unsupervised external changes.
 This class will check if any public variables are presented.
+
+# Quick start
+Ok let's get dirty. In the code block below we will test the class Example with all available Checkers.
+```
+package de.example.test
+
+import de.a9d3.testing.checker.*;
+import de.a9d3.testing.executer.SingleThreadExecutor;
+
+import org.junit.Test; (example uses JUnit4)
+
+public class ExampleTest {
+
+    @Test
+    public void baseTest() {
+        SingleThreadExecutor executor = new SingleThreadExecutor();
+
+        assertTrue(executor.execute(Example.class, Arrays.asList( new DefensiveCopyingCheck(),
+                new EmptyCollectionCheck(), new GetterIsSetterCheck(),
+                new HashcodeAndEqualsCheck(), new PublicVariableCheck())));
+    }
+}
+```
+
+Thats it? Yes thats it (in many cases).<br>
+If your class contains more complex data structures which can not be initialized with the default TestDataProvider (the console output will tell you this) please refer to the [wiki](https://github.com/Mixermachine/base-test/wiki/Creating-a-custom-TestDataProvider)
