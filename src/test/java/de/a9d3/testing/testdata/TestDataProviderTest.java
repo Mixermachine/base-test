@@ -29,7 +29,7 @@ public class TestDataProviderTest {
     public void booleanTest() {
         boolean pBool = provider.fill(boolean.class, "123", false); // should be false
 
-        assertEquals(pBool, provider.fill(boolean.class, "123", false)); // idempotency
+        assertEquals(pBool, provider.fill(boolean.class, "123", false)); // idempotence
 
         boolean pBoolSec = provider.fill(boolean.class, "12", false); // should be true
         assertNotEquals(pBool, pBoolSec);
@@ -37,7 +37,7 @@ public class TestDataProviderTest {
         Boolean npBool = provider.fill(Boolean.class, "345", false);
         assertNotNull(npBool);
 
-        assertEquals(pBool, provider.fill(Boolean.class, "345", false)); // idempotency
+        assertEquals(pBool, provider.fill(Boolean.class, "345", false)); // idempotence
 
         Boolean npBoolSec = provider.fill(Boolean.class, "34", false); // should be false
         assertNotEquals(npBool, npBoolSec);
