@@ -189,7 +189,7 @@ public class TestDataProvider {
 
         if (c.getConstructors().length == 0) {
             message.append("\nClass has no constructors.\nPlease refer to ");
-            message.append(GlobalStatics.GIT_REPO_MD);
+            message.append(GlobalStatics.TEST_DATA_PROVIDER_WIKI);
             message.append(" to get an idea how to use customMaps to initialize the TestDataProvider");
         }
 

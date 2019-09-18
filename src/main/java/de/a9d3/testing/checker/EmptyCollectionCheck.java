@@ -1,6 +1,8 @@
 package de.a9d3.testing.checker;
 
 
+import de.a9d3.testing.GlobalStatics;
+import de.a9d3.testing.checker.exception.CheckerHelperFunctions;
 import de.a9d3.testing.method_extractor.GetterIsSetterExtractor;
 import de.a9d3.testing.testdata.TestDataProvider;
 
@@ -22,25 +24,39 @@ public class EmptyCollectionCheck implements CheckerInterface {
         this.provider = provider;
     }
 
-    @Override
-    public boolean check(Class c) throws ReflectiveOperationException  {
-        Object instance = provider.fillMutableWithNull(c);
-
-        return GetterIsSetterExtractor.getGetter(c).stream()
-                .filter(getter ->
-                        checkIfListOrMap(getter.getReturnType())).noneMatch(getter -> {
-                    try {
-                        return getter.invoke(instance) == null;
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        LOGGER.warning("Received following exception while checking getter " + getter.getName() +
-                                ". Exception " + e.getMessage());
-                    }
-
-                    return true;
-                });
+    private static boolean checkIfListOrMap(Class m) {
+        return Collection.class.isAssignableFrom(m) || Map.class.isAssignableFrom(m);
     }
 
-    private boolean checkIfListOrMap(Class m) {
-        return Collection.class.isAssignableFrom(m) || Map.class.isAssignableFrom(m);
+    @Override
+    public boolean check(Class c) {
+        try {
+            Object instance = provider.fillMutableWithNull(c);
+
+            return GetterIsSetterExtractor.getGetter(c).stream()
+                    .filter(getter -> checkIfListOrMap(getter.getReturnType()))
+                    .noneMatch(getter -> {
+                        try {
+                            boolean returnedNull = getter.invoke(instance) == null;
+
+                            if (returnedNull) {
+                                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter,
+                                        "Returned null instead of empty object.");
+                            }
+
+                            return returnedNull;
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter, e);
+                        }
+
+                        return true;
+                    });
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c,
+                    "Could not initialize class with internal null variables. You might need a custom " +
+                            "TestDataProvider. See " + GlobalStatics.TEST_DATA_PROVIDER_WIKI, e);
+        }
+
+        return false;
     }
 }

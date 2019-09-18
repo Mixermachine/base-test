@@ -17,7 +17,7 @@ public class PublicVariableCheckTest {
     }
 
     @Test
-    public void positiveTest() throws ReflectiveOperationException {
+    public void positiveTest() {
         assertTrue(checker.check(PublicVariableCheckPositiveTestClass.class));
 
         checker = new PublicVariableCheck(true);
@@ -25,7 +25,7 @@ public class PublicVariableCheckTest {
     }
 
     @Test
-    public void negativeTest() throws ReflectiveOperationException {
+    public void negativeTest() {
         assertFalse(checker.check(PublicVariableCheckNegativeTestClass.class));
 
         checker = new PublicVariableCheck(true);
@@ -33,7 +33,7 @@ public class PublicVariableCheckTest {
     }
 
     @Test
-    public void staticVariablesPositiveTest() throws ReflectiveOperationException {
+    public void staticVariablesPositiveTest() {
         // standard checker should reject
         assertFalse(checker.check(PublicVariableCheckStaticVariablesPositiveTestClass.class));
 
@@ -43,7 +43,7 @@ public class PublicVariableCheckTest {
     }
 
     @Test
-    public void staticVariablesNegativeTest() throws ReflectiveOperationException {
+    public void staticVariablesNegativeTest() {
         assertFalse(checker.check(PublicVariableCheckStaticVariablesNegative0TestClass.class));
         assertFalse(checker.check(PublicVariableCheckStaticVariablesNegative1TestClass.class));
 

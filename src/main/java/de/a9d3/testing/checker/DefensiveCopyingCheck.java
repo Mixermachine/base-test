@@ -1,5 +1,6 @@
 package de.a9d3.testing.checker;
 
+import de.a9d3.testing.checker.exception.CheckerHelperFunctions;
 import de.a9d3.testing.method.GetterSetterMatcher;
 import de.a9d3.testing.method.IsSetterMatcher;
 import de.a9d3.testing.method.MethodMatcherInterface;
@@ -22,8 +23,18 @@ public class DefensiveCopyingCheck implements CheckerInterface {
         this.provider = provider;
     }
 
+    private static boolean isPrimitiveWrapper(Class c) {
+        return c == Double.class || c == Float.class || c == Long.class ||
+                c == Integer.class || c == Short.class || c == Character.class ||
+                c == Byte.class || c == Boolean.class;
+    }
+
+    private static boolean isString(Class c) {
+        return c == String.class;
+    }
+
     @Override
-    public boolean check(Class c)  {
+    public boolean check(Class c) {
         MethodMatcherInterface getterSetterMatcher = new GetterSetterMatcher();
         MethodMatcherInterface isSetterMatcher = new IsSetterMatcher();
 
@@ -43,24 +54,20 @@ public class DefensiveCopyingCheck implements CheckerInterface {
 
                             tuple.getB().invoke(a, data);
 
-                            return data == tuple.getA().invoke(a);
+                            boolean result = data == tuple.getA().invoke(a);
+
+                            if (result) {
+                                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple,
+                                        "Returned object is the same object which was previously set.");
+                            }
+
+                            return result;
                         }
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        LOGGER.warning("Received following exception while checking tuple " + tuple.toString() +
-                                ". Exception " + e.getMessage());
+                        CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple, e);
                     }
 
                     return true;
                 });
-    }
-
-    private boolean isPrimitiveWrapper(Class c) {
-        return c == Double.class || c == Float.class || c == Long.class ||
-                c == Integer.class || c == Short.class || c == Character.class ||
-                c == Byte.class || c == Boolean.class;
-    }
-
-    private boolean isString(Class c) {
-        return c == String.class;
     }
 }

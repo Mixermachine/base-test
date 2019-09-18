@@ -1,11 +1,11 @@
 package de.a9d3.testing.checker;
 
-import de.a9d3.testing.checker.exception.MismatchException;
 import de.a9d3.testing.resource_classes.GetterIsSetterCheckNegativeTestClass;
 import de.a9d3.testing.resource_classes.GetterIsSetterCheckPositiveTestClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class GetterIsSetterCheckTest {
@@ -18,14 +18,12 @@ public class GetterIsSetterCheckTest {
     }
 
     @Test
-    public void positiveTest()
-            throws ReflectiveOperationException {
+    public void positiveTest() {
         assertTrue(check.check(GetterIsSetterCheckPositiveTestClass.class));
-
     }
 
-    @Test(expected = MismatchException.class)
-    public void negativeTest() throws ReflectiveOperationException {
-        check.check(GetterIsSetterCheckNegativeTestClass.class);
+    @Test
+    public void negativeTest() {
+        assertFalse(check.check(GetterIsSetterCheckNegativeTestClass.class));
     }
 }

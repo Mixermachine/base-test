@@ -5,7 +5,8 @@ import de.a9d3.testing.resource_classes.EmptyCollectionPositiveTestClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class EmptyCollectionCheckTest {
     private CheckerInterface checker;
@@ -16,12 +17,12 @@ public class EmptyCollectionCheckTest {
     }
 
     @Test
-    public void positiveTest() throws Exception {
+    public void positiveTest() {
         assertTrue(checker.check(EmptyCollectionPositiveTestClass.class));
     }
 
     @Test
-    public void negativeTest() throws Exception {
+    public void negativeTest() {
         assertFalse(checker.check(EmptyCollectionNegativeTestClass.class));
     }
 }

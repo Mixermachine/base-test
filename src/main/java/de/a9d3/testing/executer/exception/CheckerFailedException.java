@@ -10,4 +10,8 @@ public class CheckerFailedException extends RuntimeException {
     public CheckerFailedException(CheckerInterface checker) {
         super("Checker " + checker.toString() + " failed.");
     }
+
+    public CheckerFailedException(String reason) {
+        super(reason);
+    }
 }
