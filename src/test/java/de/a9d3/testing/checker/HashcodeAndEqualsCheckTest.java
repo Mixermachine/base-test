@@ -16,33 +16,33 @@ public class HashcodeAndEqualsCheckTest {
     }
 
     @Test
-    public void positiveTest() throws ReflectiveOperationException {
+    public void positiveTest() {
         assertTrue(checker.check(HashCodeAndEqualsCheckPositiveTestClass.class));
     }
 
     @Test
-    public void negativeFirstTest() throws ReflectiveOperationException {
+    public void negativeFirstTest() {
         assertFalse(checker.check(HashCodeAndEqualsCheckNegativeFirstTestClass.class));
     }
 
     @Test
-    public void negativeSecondTest() throws ReflectiveOperationException {
+    public void negativeSecondTest() {
         assertFalse(checker.check(HashCodeAndEqualsCheckNegativeSecondTestClass.class));
     }
 
     @Test
-    public void booleanValueTest() throws ReflectiveOperationException {
-        // previously boolean values could not inflict a failed test
+    public void booleanValueTest() {
+        // previously boolean values could inflict a failed test
         assertTrue(checker.check(HashCodeAndEqualsCheckBooleanTestClass.class));
     }
 
     @Test
-    public void sameObjectTest() throws ReflectiveOperationException {
+    public void sameObjectTest() {
         assertFalse(checker.check(HashCodeAndEqualsCheckSameObjectTestClass.class));
     }
 
     @Test
-    public void differentClassTest() throws ReflectiveOperationException {
+    public void differentClassTest() {
         assertFalse(checker.check(HashCodeAndEqualsCheckDifferentClassTestClass.class));
     }
 }

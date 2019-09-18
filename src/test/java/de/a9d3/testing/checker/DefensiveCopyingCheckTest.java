@@ -17,12 +17,12 @@ public class DefensiveCopyingCheckTest {
     }
 
     @Test
-    public void positiveOnlyImmutableTest() throws ReflectiveOperationException {
+    public void positiveOnlyImmutableTest() {
         assertTrue(checker.check(DefensiveCopyingCheckOnlyImmutableTestClass.class));
     }
 
     @Test
-    public void positiveMutable() throws ReflectiveOperationException {
+    public void positiveMutable() {
         assertTrue(checker.check(DefensiveCopyingCheckMutableTestClass.class));
     }
 }
