@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import static org.junit.Assert.assertTrue;
 
@@ -35,14 +34,5 @@ public class SingleThreadExecutorTest {
         CheckerInterface checker2 = c -> false;
 
         executor.execute(Object.class, Arrays.asList(checker1, checker2));
-    }
-
-    @Test(expected = CheckerFailedException.class)
-    public void internalReflectiveOperationExceptionTest() {
-        CheckerInterface checkerInterface = c -> {
-            throw new ReflectiveOperationException();
-        };
-
-        executor.execute(Object.class, Collections.singletonList(checkerInterface));
     }
 }
