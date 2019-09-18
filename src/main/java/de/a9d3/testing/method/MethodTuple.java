@@ -33,6 +33,14 @@ public class MethodTuple {
     }
 
     @Override
+    public String toString() {
+        return "MethodTuple{" +
+                "a=" + a +
+                ", b=" + b +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
