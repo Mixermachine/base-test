@@ -1,42 +1,19 @@
-package de.a9d3.testing.method;
+package de.a9d3.testing.tuple;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-public class MethodTuple {
-    private Method a;
-    private Method b;
-
-    public MethodTuple() {
-        // empty constructor
-    }
-
+public class MethodTuple extends Tuple<Method, Method> {
     public MethodTuple(Method a, Method b) {
-        this.a = a;
-        this.b = b;
-    }
-
-    public Method getA() {
-        return a;
-    }
-
-    public void setA(Method a) {
-        this.a = a;
-    }
-
-    public Method getB() {
-        return b;
-    }
-
-    public void setB(Method b) {
-        this.b = b;
+        this.setA(a);
+        this.setB(b);
     }
 
     @Override
     public String toString() {
         return "MethodTuple{" +
-                "a=" + a +
-                ", b=" + b +
+                "a=" + this.getA() +
+                ", b=" + this.getB() +
                 '}';
     }
 
