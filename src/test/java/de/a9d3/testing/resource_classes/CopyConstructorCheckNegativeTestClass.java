@@ -8,7 +8,8 @@ public class CopyConstructorCheckNegativeTestClass {
     private Boolean b;
     private boolean c;
     private String d;
-    private Map e;
+    private String e;
+    private Map f;
 
     public CopyConstructorCheckNegativeTestClass() {
         // should be able to be instantiated
@@ -17,9 +18,10 @@ public class CopyConstructorCheckNegativeTestClass {
     public CopyConstructorCheckNegativeTestClass(CopyConstructorCheckNegativeTestClass other) {
         this.a = other.a;
         this.b = other.b;
-        this.c = other.b; // Error in CopyConstructor
+        this.c = other.c;
         this.d = other.d;
-        this.e = other.e;
+        this.e = other.d; // Error in copy constructor
+        this.f = other.f;
     }
 
     public Integer getA() {
@@ -54,12 +56,20 @@ public class CopyConstructorCheckNegativeTestClass {
         this.d = d;
     }
 
-    public Map getE() {
+    public String getE() {
         return e;
     }
 
-    public void setE(Map e) {
+    public void setE(String e) {
         this.e = e;
+    }
+
+    public Map getF() {
+        return f;
+    }
+
+    public void setF(Map f) {
+        this.f = f;
     }
 
     @Override
@@ -71,11 +81,12 @@ public class CopyConstructorCheckNegativeTestClass {
                 Objects.equals(a, that.a) &&
                 Objects.equals(b, that.b) &&
                 Objects.equals(d, that.d) &&
-                Objects.equals(e, that.e);
+                Objects.equals(e, that.e) &&
+                Objects.equals(f, that.f);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(a, b, c, d, e);
+        return Objects.hash(a, b, c, d, e, f);
     }
 }
