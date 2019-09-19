@@ -11,8 +11,11 @@ import java.util.logging.Logger;
 public class SingleThreadExecutor implements Executor {
     private static final Logger LOGGER = Logger.getLogger(SingleThreadExecutor.class.getName());
 
-    private static String executionLogToString(Map<String, String> executionLog) {
+    private static String executionLogToString(Class testClass, Map<String, String> executionLog) {
         StringBuilder builder = new StringBuilder();
+        builder.append("Tested ");
+        builder.append(testClass.getName());
+        builder.append("\n");
 
         executionLog.forEach((checker, log) -> {
             builder.append(checker);
@@ -39,10 +42,10 @@ public class SingleThreadExecutor implements Executor {
         }
 
         if (failed) {
-            throw new CheckerFailedException(executionLogToString(executionLog));
+            throw new CheckerFailedException(executionLogToString(c, executionLog));
         }
 
-        LOGGER.info(() -> executionLogToString(executionLog));
+        LOGGER.info(() -> executionLogToString(c, executionLog));
         return true;
     }
 }

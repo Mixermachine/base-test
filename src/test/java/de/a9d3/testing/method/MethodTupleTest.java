@@ -6,6 +6,7 @@ import de.a9d3.testing.checker.HashcodeAndEqualsCheck;
 import de.a9d3.testing.checker.PublicVariableCheck;
 import de.a9d3.testing.executer.SingleThreadExecutor;
 import de.a9d3.testing.testdata.TestDataProvider;
+import de.a9d3.testing.tuple.MethodTuple;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -24,8 +25,12 @@ public class MethodTupleTest {
         SingleThreadExecutor executor = new SingleThreadExecutor();
         Map<String, Function<String, Object>> customMap = new HashMap<>();
 
-        Method[] dummyMethod = this.getClass().getMethods();
-        customMap.put(Method.class.getName(), s -> dummyMethod[0]);
+        Method[] dummyMethods = this.getClass().getMethods();
+        customMap.put(Method.class.getName(), s -> dummyMethods[0]);
+
+        // due to type erasure we only see type of the generic extended class in hashcodeAndEqualsCheck,
+        // thus simply insert Method object here
+        customMap.put(Object.class.getName(), s -> dummyMethods[0]);
         TestDataProvider provider = new TestDataProvider(customMap);
 
         // no defensive copying as tuple should be lightweight

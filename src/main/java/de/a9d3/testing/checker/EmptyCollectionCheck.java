@@ -2,7 +2,6 @@ package de.a9d3.testing.checker;
 
 
 import de.a9d3.testing.GlobalStatics;
-import de.a9d3.testing.checker.exception.CheckerHelperFunctions;
 import de.a9d3.testing.method_extractor.GetterIsSetterExtractor;
 import de.a9d3.testing.testdata.TestDataProvider;
 

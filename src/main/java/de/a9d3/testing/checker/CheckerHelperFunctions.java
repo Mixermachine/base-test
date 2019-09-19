@@ -1,5 +1,9 @@
-package de.a9d3.testing.checker.exception;
+package de.a9d3.testing.checker;
 
+import de.a9d3.testing.testdata.TestDataProvider;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public final class CheckerHelperFunctions {
@@ -37,5 +41,20 @@ public final class CheckerHelperFunctions {
         }
 
         logger.warning(builder::toString);
+    }
+
+    public static void executeSetter(TestDataProvider provider, Method m, Object o, int iter)
+            throws IllegalAccessException, InvocationTargetException {
+        Object input;
+
+        if (m.getParameterTypes()[0].equals(boolean.class)) {
+            // always set true as default for boolean is false
+            input = true;
+        } else {
+            input = provider.fill(m.getParameterTypes()[0], "f50c83cf-5b60-4b2b-a869-b99bb0d130b9" + iter,
+                    false);
+        }
+
+        m.invoke(o, input);
     }
 }

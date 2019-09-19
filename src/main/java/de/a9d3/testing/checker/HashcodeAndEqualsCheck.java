@@ -1,7 +1,6 @@
 package de.a9d3.testing.checker;
 
 import de.a9d3.testing.GlobalStatics;
-import de.a9d3.testing.checker.exception.CheckerHelperFunctions;
 import de.a9d3.testing.method_extractor.GetterIsSetterExtractor;
 import de.a9d3.testing.testdata.TestDataProvider;
 
@@ -91,7 +90,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
 
     private boolean checkIfEqualsAndHashcodeReactToSetter(Class c, Object a, Object b, int iter, Method mySetter) {
         try {
-            executeSetter(mySetter, a, iter);
+            CheckerHelperFunctions.executeSetter(provider, mySetter, a, iter);
 
             // Check same object
             if (!(areEqual(a, a))) {
@@ -120,7 +119,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
             }
 
             // Set setter in second object
-            executeSetter(mySetter, b, iter);
+            CheckerHelperFunctions.executeSetter(provider, mySetter, b, iter);
 
             // Should equal with same internal state
             if (!areEqual(a, b) || !haveEqualHashCode(c, a, b)) {
@@ -139,20 +138,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
         return false;
     }
 
-    private void executeSetter(Method m, Object o, int iter)
-            throws IllegalAccessException, InvocationTargetException {
-        Object input;
 
-        if (m.getParameterTypes()[0].equals(boolean.class)) {
-            // always set true as default for boolean is false
-            input = true;
-        } else {
-            input = provider.fill(m.getParameterTypes()[0], "f50c83cf-5b60-4b2b-a869-b99bb0d130b9" + iter,
-                    false);
-        }
-
-        m.invoke(o, input);
-    }
 
     private boolean filterForFillableData(Method setter) {
         return provider.fill(setter.getParameterTypes()[0], "123", false) != null;
