@@ -1,12 +1,14 @@
 package de.a9d3.testing.method;
 
 import de.a9d3.testing.resource_classes.TestClass;
+import de.a9d3.testing.tuple.MethodTuple;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class IsSetterMatcherTest {
 

@@ -1,6 +1,7 @@
 package de.a9d3.testing.method;
 
 import de.a9d3.testing.method_extractor.MethodExtractor;
+import de.a9d3.testing.tuple.MethodTuple;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class GenericMatcher {
 
         List<MethodTuple> tuples = new ArrayList<>();
 
-        a.stream().forEach(aMethod -> {
+        a.forEach(aMethod -> {
             Optional<Method> optionalBMethod = b.stream()
                     .filter(bMethod -> aMethod.getName().replaceAll(aRegex, "")
                             .equals(bMethod.getName().replaceFirst(bRegex, "")))
