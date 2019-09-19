@@ -35,4 +35,14 @@ public class CopyConstructorCheckTest {
     public void negativeTest() {
         assertFalse(checker.check(CopyConstructorCheckNegativeTestClass.class));
     }
+
+    @Test
+    public void noCopyConstructorTest() {
+        // this test does not have a copyConstructor. Should instantly return false.
+        assertFalse(checker.check(CopyConstructorCheckTest.class));
+
+        // even without provider (also increases test coverage)
+        checker = new CopyConstructorCheck(null);
+        assertFalse(checker.check(CopyConstructorCheckTest.class));
+    }
 }
