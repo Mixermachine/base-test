@@ -1,11 +1,10 @@
 package de.a9d3.testing.checker;
 
-import de.a9d3.testing.checker.exception.CheckerHelperFunctions;
 import de.a9d3.testing.method.GetterSetterMatcher;
 import de.a9d3.testing.method.IsSetterMatcher;
 import de.a9d3.testing.method.MethodMatcherInterface;
-import de.a9d3.testing.method.MethodTuple;
 import de.a9d3.testing.testdata.TestDataProvider;
+import de.a9d3.testing.tuple.MethodTuple;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

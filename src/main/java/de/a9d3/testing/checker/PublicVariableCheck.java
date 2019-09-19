@@ -1,7 +1,5 @@
 package de.a9d3.testing.checker;
 
-import de.a9d3.testing.checker.exception.CheckerHelperFunctions;
-
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.logging.Logger;

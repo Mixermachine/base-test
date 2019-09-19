@@ -1,6 +1,5 @@
 package de.a9d3.testing.checker;
 
-import de.a9d3.testing.checker.exception.CheckerHelperFunctions;
 import de.a9d3.testing.method.GetterSetterMatcher;
 import de.a9d3.testing.method.IsSetterMatcher;
 import de.a9d3.testing.method.MethodMatcherInterface;
