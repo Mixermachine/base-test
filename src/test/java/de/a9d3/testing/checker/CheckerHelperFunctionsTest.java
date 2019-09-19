@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker.exception;
+package de.a9d3.testing.checker;
 
 import org.junit.Before;
 import org.junit.Test;
