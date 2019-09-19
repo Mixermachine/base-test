@@ -1,4 +1,4 @@
-package de.a9d3.testing.method;
+package de.a9d3.testing.tuple;
 
 import de.a9d3.testing.checker.EmptyCollectionCheck;
 import de.a9d3.testing.checker.GetterIsSetterCheck;
@@ -6,7 +6,6 @@ import de.a9d3.testing.checker.HashcodeAndEqualsCheck;
 import de.a9d3.testing.checker.PublicVariableCheck;
 import de.a9d3.testing.executer.SingleThreadExecutor;
 import de.a9d3.testing.testdata.TestDataProvider;
-import de.a9d3.testing.tuple.MethodTuple;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
