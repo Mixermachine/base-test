@@ -3,7 +3,7 @@
     <groupId>de.a9d3.testing</groupId>
     <artifactId>base-test</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.10</version>
+    <version>0.0.11-SNAPSHOT</version>
 
     <description>A project that helps you to test your java classes for basic things like getter==setter,
         hashCode and equals. Also provides a convenient to instantiate classes with partially random data
@@ -24,7 +24,7 @@
         <connection>scm:git:git://github.com/Mixermachine/base-test.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/Mixermachine/base-test.git</developerConnection>
         <url>https://github.com/Mixermachine/base-test</url>
-        <tag>base-test-0.0.10</tag>
+        <tag>base-test-0.0.4</tag>
     </scm>
 
     <distributionManagement>
