@@ -1,2 +1,2 @@
 #!/bin/bash
-mvn release:prepare -DsignArtifacts=true
+mvn release:prepare -DsignArtifacts

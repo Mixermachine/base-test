@@ -3,7 +3,7 @@
     <groupId>de.a9d3.testing</groupId>
     <artifactId>base-test</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT</version>
 
     <description>A project that helps you to test your java classes for basic things like getter==setter,
         hashCode and equals. Also provides a convenient to instantiate classes with partially random data
@@ -71,9 +71,6 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>1.6</version>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
