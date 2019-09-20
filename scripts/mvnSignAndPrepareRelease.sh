@@ -1,2 +1,2 @@
 #!/bin/bash
-mvn release:prepare -Dgpg.skip=false
+mvn release:prepare -SignArtifacts=true

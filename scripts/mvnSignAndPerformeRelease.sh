@@ -1,2 +1,2 @@
 #!/bin/bash
-mvn release:perform -Dgpg.skip=false
+mvn release:perform -SignArtifacts=true
