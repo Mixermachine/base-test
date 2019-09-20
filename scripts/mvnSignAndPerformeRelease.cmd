@@ -1,1 +1,1 @@
-mvn release:perform -DsignArtifacts=true
+mvn release:perform -DsignArtifacts
