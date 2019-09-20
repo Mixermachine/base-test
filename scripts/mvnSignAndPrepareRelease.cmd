@@ -1,1 +1,1 @@
-mvn release:prepare -SignArtifacts=true
+mvn release:prepare -DsignArtifacts=true
