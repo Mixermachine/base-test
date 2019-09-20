@@ -1,1 +1,1 @@
-mvn gpg.skip=false release:perform
+mvn release:perform -Dgpg.skip=false

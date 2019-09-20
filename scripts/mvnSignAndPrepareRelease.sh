@@ -1,2 +1,2 @@
 #!/bin/bash
-mvn gpg.skip=false release:prepare
+mvn release:prepare -Dgpg.skip=false
