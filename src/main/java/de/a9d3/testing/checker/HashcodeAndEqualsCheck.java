@@ -70,7 +70,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
 
 
             for (Method mySetter : setterList) {
-                if (checkIfEqualsAndHashcodeReactToSetter(c, a, b, iter, mySetter)) {
+                if (!checkIfEqualsAndHashcodeReactToSetter(c, a, b, iter, mySetter)) {
                     return false;
                 }
 
@@ -97,7 +97,14 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
                 CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
                         "Object should be equal to it self (same pointer).");
 
-                return true;
+                return false;
+            }
+
+            if (areEqual(a, null)) {
+                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
+                        "Object should not be equal to null");
+
+                return false;
             }
 
             // Check different class. Guarantee to always use a different class
@@ -106,7 +113,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
                 CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
                         "Comparison with Object of different class should return false.");
 
-                return true;
+                return false;
             }
 
             // Should not equal with different internal states
@@ -115,7 +122,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
                         "Two objects with different states (one with setter invoked) should not equal or " +
                                 "have equal hashCode.");
 
-                return true;
+                return false;
             }
 
             // Set setter in second object
@@ -126,16 +133,14 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
                 CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
                         "Objects with same internal states should equal and have same hashCode");
 
-                return true;
+                return false;
             }
-
-            // increase seed
-
 
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter, e);
         }
-        return false;
+
+        return true;
     }
 
 
