@@ -6,10 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
@@ -22,7 +21,7 @@ public class TestDataProviderTest {
 
     @Before
     public void setup() {
-        provider = new TestDataProvider();
+        provider = TestDataProvider.getSeededTestDataProvider();
     }
 
     @Test
@@ -211,5 +210,45 @@ public class TestDataProviderTest {
         assertNotNull(testClass.getD());
     }
 
+    @Test
+    public void defaultTestDataProviderTest() {
+        provider = TestDataProvider.getDefaultTestDataProvider();
 
+        // check if returned values are defaults
+        assertEquals(false, provider.fill(boolean.class, "123", false));
+        assertEquals(0, (char) provider.fill(char.class, "123", false));
+        assertEquals(0, (byte) provider.fill(byte.class, "123", false));
+        assertEquals(0, (short) provider.fill(short.class, "123", false));
+        assertEquals(0, (int) provider.fill(int.class, "123", false));
+        assertEquals(0, (long) provider.fill(long.class, "123", false));
+        assertEquals(0, provider.fill(float.class, "123", false), 0);
+        assertEquals(0.0, provider.fill(double.class, "123", false), 0);
+
+        assertEquals(false, provider.fill(Boolean.class, "123", false));
+        assertEquals(0, (char) provider.fill(Character.class, "123", false));
+        assertEquals(0, (byte) provider.fill(Byte.class, "123", false));
+        assertEquals(0, (short) provider.fill(Short.class, "123", false));
+        assertEquals(0, (int) provider.fill(Integer.class, "123", false));
+        assertEquals(0, (long) provider.fill(Long.class, "123", false));
+        assertEquals(0, provider.fill(Float.class, "123", false), 0);
+        assertEquals(0.0, provider.fill(Double.class, "123", false), 0);
+
+        assertEquals("", provider.fill(String.class, "123", false));
+        assertEquals(Instant.ofEpochSecond(0), provider.fill(Instant.class, "123", false));
+    }
+
+    @Test
+    public void addCustomMappingsTest() {
+        Character checkChar = 'c';
+
+        provider = new TestDataProvider(Collections.emptyMap());
+        assertNull(provider.fill(Character.class, "123", false));
+
+        Map<String, Function<String, Object>> map = new HashMap<>();
+        map.put(Character.class.getName(), s -> checkChar);
+
+        provider.addCustomMappings(map);
+
+        assertEquals(checkChar, provider.fill(Character.class, "123", false));
+    }
 }
