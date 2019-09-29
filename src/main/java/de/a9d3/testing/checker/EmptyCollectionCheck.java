@@ -6,6 +6,7 @@ import de.a9d3.testing.method_extractor.GetterIsSetterExtractor;
 import de.a9d3.testing.testdata.TestDataProvider;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -27,6 +28,23 @@ public class EmptyCollectionCheck implements CheckerInterface {
         return Collection.class.isAssignableFrom(m) || Map.class.isAssignableFrom(m);
     }
 
+    private static boolean checkIfCollectionReturnsNull(Object instance, Method getter) {
+        try {
+            boolean returnedNull = getter.invoke(instance) == null;
+
+            if (returnedNull) {
+                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter,
+                        "Returned null instead of empty object.");
+            }
+
+            return returnedNull;
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter, e);
+        }
+
+        return true;
+    }
+
     @Override
     public boolean check(Class c) {
         try {
@@ -34,22 +52,7 @@ public class EmptyCollectionCheck implements CheckerInterface {
 
             return GetterIsSetterExtractor.getGetter(c).stream()
                     .filter(getter -> checkIfListOrMap(getter.getReturnType()))
-                    .noneMatch(getter -> {
-                        try {
-                            boolean returnedNull = getter.invoke(instance) == null;
-
-                            if (returnedNull) {
-                                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter,
-                                        "Returned null instead of empty object.");
-                            }
-
-                            return returnedNull;
-                        } catch (IllegalAccessException | InvocationTargetException e) {
-                            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter, e);
-                        }
-
-                        return true;
-                    });
+                    .noneMatch(getter -> checkIfCollectionReturnsNull(instance, getter));
         } catch (IllegalAccessException | InvocationTargetException e) {
             CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c,
                     "Could not initialize class with internal null variables. You might need a custom " +
