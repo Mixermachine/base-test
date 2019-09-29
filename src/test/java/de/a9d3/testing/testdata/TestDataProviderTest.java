@@ -141,7 +141,7 @@ public class TestDataProviderTest {
     @Test
     public void generateTestDataByClassListTest() {
         List<String> stringList = new ArrayList<>();
-        stringList = provider.generateTestDataByNonStandardClass(stringList.getClass(), "123", false);
+        stringList = provider.decideWhichKindOfComplexClassIsNeeded(stringList.getClass(), "123", false);
 
         assertNotNull(stringList);
         assertEquals(TestDataProvider.LIST_ARRAY_ITEM_COUNT, stringList.size());
@@ -150,7 +150,7 @@ public class TestDataProviderTest {
     @Test
     public void generateTestDataByClassMapTest() {
         HashMap map = new HashMap<>();
-        map = provider.generateTestDataByNonStandardClass(map.getClass(), "123", false);
+        map = provider.decideWhichKindOfComplexClassIsNeeded(map.getClass(), "123", false);
 
         assertNotNull(map);
         assertEquals(1, map.size());
