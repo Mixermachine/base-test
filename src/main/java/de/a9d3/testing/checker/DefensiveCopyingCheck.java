@@ -4,6 +4,7 @@ import de.a9d3.testing.method.GetterSetterMatcher;
 import de.a9d3.testing.method.IsSetterMatcher;
 import de.a9d3.testing.method.MethodMatcherInterface;
 import de.a9d3.testing.testdata.TestDataProvider;
+import de.a9d3.testing.tuple.MethodTuple;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
@@ -38,35 +39,41 @@ public class DefensiveCopyingCheck implements CheckerInterface {
         MethodMatcherInterface isSetterMatcher = new IsSetterMatcher();
 
         return Stream.concat(getterSetterMatcher.match(c).stream(), isSetterMatcher.match(c).stream())
-                .noneMatch(tuple -> {
-                    try {
-                        Class myC = tuple.getA().getReturnType();
-                        if (myC.isPrimitive() || isPrimitiveWrapper(myC) || isString(myC)) {
-                            return false;
-                        } else {
-                            // check if getter returns same item which has been previously set by
-                            Object a = provider.fill(c, "123", false);
+                .noneMatch(tuple -> checkIfClassImplementsDefensiveCopyingForMethodTuple(c, tuple));
+    }
 
-                            Object data = provider
-                                    .fill(tuple.getA().getReturnType(), "824a5189-0014-4d64-a7bd-89f921ab8de2",
-                                            false);
+    private boolean checkIfClassImplementsDefensiveCopyingForMethodTuple(Class c, MethodTuple tuple) {
+        Class myC = tuple.getA().getReturnType();
 
-                            tuple.getB().invoke(a, data);
+        if (myC.isPrimitive() || isPrimitiveWrapper(myC) || isString(myC)) {
+            return false;
+        } else {
+            try {
+                return checkIfComplexClassImplementsDefensiveCopyingForMethodTuple(c, tuple);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple, e);
+            }
+        }
+        return true;
+    }
 
-                            boolean result = data == tuple.getA().invoke(a);
+    private boolean checkIfComplexClassImplementsDefensiveCopyingForMethodTuple(Class c, MethodTuple tuple) throws IllegalAccessException, InvocationTargetException {
+        // check if getter returns same item which has been previously set by
+        Object a = provider.fill(c, "123", false);
 
-                            if (result) {
-                                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple,
-                                        "Returned object is the same object which was previously set.");
-                            }
+        Object data = provider
+                .fill(tuple.getA().getReturnType(), "824a5189-0014-4d64-a7bd-89f921ab8de2",
+                        false);
 
-                            return result;
-                        }
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple, e);
-                    }
+        tuple.getB().invoke(a, data);
 
-                    return true;
-                });
+        boolean result = data == tuple.getA().invoke(a);
+
+        if (result) {
+            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple,
+                    "Returned object is the same object which was previously set.");
+        }
+
+        return result;
     }
 }

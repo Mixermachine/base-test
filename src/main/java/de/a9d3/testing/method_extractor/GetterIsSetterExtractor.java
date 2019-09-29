@@ -10,7 +10,7 @@ public class GetterIsSetterExtractor {
         // should not be invoke for now
     }
 
-    public static List<Method>  getGetter(Class c) {
+    public static List<Method> getGetter(Class c) {
         return MethodExtractor.extract(c, "^get");
     }
 

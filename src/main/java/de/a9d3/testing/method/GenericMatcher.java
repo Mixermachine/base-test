@@ -19,15 +19,18 @@ public class GenericMatcher {
 
         List<MethodTuple> tuples = new ArrayList<>();
 
-        a.forEach(aMethod -> {
-            Optional<Method> optionalBMethod = b.stream()
-                    .filter(bMethod -> aMethod.getName().replaceAll(aRegex, "")
-                            .equals(bMethod.getName().replaceFirst(bRegex, "")))
-                    .findAny();
-
-            optionalBMethod.ifPresent(bMethod -> tuples.add(new MethodTuple(aMethod, bMethod)));
-        });
+        a.forEach(aMethod -> matchMethodsAWithB(aRegex, bRegex, b, tuples, aMethod));
 
         return tuples;
+    }
+
+    private static void matchMethodsAWithB(String aRegex, String bRegex, List<Method> b, List<MethodTuple> tuples,
+                                           Method aMethod) {
+        Optional<Method> optionalBMethod = b.stream()
+                .filter(bMethod -> aMethod.getName().replaceAll(aRegex, "")
+                        .equals(bMethod.getName().replaceFirst(bRegex, "")))
+                .findAny();
+
+        optionalBMethod.ifPresent(bMethod -> tuples.add(new MethodTuple(aMethod, bMethod)));
     }
 }

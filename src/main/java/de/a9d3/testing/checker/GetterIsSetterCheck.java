@@ -62,27 +62,30 @@ public class GetterIsSetterCheck implements CheckerInterface {
         Object instance = provider.fill(c, "test", true);
 
         for (int i = 0; i < tuples.size(); i++) {
-            MethodTuple tuple = tuples.get(i);
-            Object data = provider.fill(tuple.getB().getParameterTypes()[0], seed + i, true);
-
-            try {
-                tuple.getB().invoke(instance, data);
-
-                boolean getterEqualsSetter = data.equals(tuple.getA().invoke(instance));
-
-                if (!getterEqualsSetter) {
-                    CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple,
-                            "Getter return value did not match previously set value.");
-
-                    return false;
-                }
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple, "Failed to invoke. See exception.");
-
+            if (checkIfGetterReturnSetValue(tuples.get(i), instance, i))
                 return false;
-            }
         }
 
         return true;
+    }
+
+    private boolean checkIfGetterReturnSetValue(MethodTuple tuple, Object instance, int i) {
+        Object data = provider.fill(tuple.getB().getParameterTypes()[0], seed + i, true);
+
+        try {
+            tuple.getB().invoke(instance, data);
+
+            if (!data.equals(tuple.getA().invoke(instance))) {
+                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple,
+                        "Getter return value did not match previously set value.");
+
+                return true;
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple, "Failed to invoke. See exception.");
+
+            return true;
+        }
+        return false;
     }
 }

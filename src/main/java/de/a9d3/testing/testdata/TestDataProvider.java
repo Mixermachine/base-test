@@ -12,15 +12,13 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
-// yes unchecked casts from Object to T (T being the target class are done in this class)
+// yes unchecked casts from Object to T (T being the target class) are done in this class.
 // I have not found a better way to do it.
 // If you know a better way, do not hesitate to write an issue on GlobalStatics.GIT_REPO
 @SuppressWarnings("unchecked")
 public class TestDataProvider {
-    private static final Logger LOGGER = Logger.getLogger(TestDataProvider.class.getName());
-
     protected static final int LIST_ARRAY_ITEM_COUNT = 2;
-
+    private static final Logger LOGGER = Logger.getLogger(TestDataProvider.class.getName());
     private Map<String, Function<String, Object>> providerMap;
 
     /**
@@ -40,47 +38,102 @@ public class TestDataProvider {
         providerMap.putAll(customMap);
     }
 
+    /**
+     * This factory will return a TestDataProvider which uses the provided seeds for generating test data
+     *
+     * @return A new TestDataProvider with a seeded provider map
+     */
     public static TestDataProvider getSeededTestDataProvider() {
         // current default
-        return new TestDataProvider();
+        return new TestDataProvider(TestDataStatics.getCompleteSeededMap());
+    }
+
+    /**
+     * This factory will return a TestDataProvider which uses the class defaults for generating test data
+     *
+     * @return A new TestDataProvider with a default provider map
+     */
+    public static TestDataProvider getDefaultTestDataProvider() {
+        return new TestDataProvider(TestDataStatics.getCompleteDefaultMap());
+    }
+
+    private static void writeWarningLogCouldNotInitialize(Class c) {
+        // Could not initialize class
+        StringBuilder message = new StringBuilder();
+        message.append("Could not initialize ");
+        message.append(c.getName());
+
+        if (c.getConstructors().length == 0) {
+            message.append("\nClass has no constructors.\nPlease refer to ");
+            message.append(GlobalStatics.TEST_DATA_PROVIDER_WIKI);
+            message.append(" to get an idea how to use customMaps to initialize the TestDataProvider");
+        }
+
+        LOGGER.warning(message::toString);
+    }
+
+    private static Constructor[] getSortedConstructors(Class c, boolean tryComplexConstructorFirst) {
+        Constructor[] constructors = c.getConstructors();
+        Arrays.sort(constructors, tryComplexConstructorFirst ? // tryComplexConstructorFirst determines the sorted order
+                Comparator.comparingInt(con -> -con.getParameterCount()) :
+                Comparator.comparingInt(Constructor::getParameterCount));
+        return constructors;
     }
 
     /**
      * This method will try to invoke the provided class.
      *
-     * @param c                               The class which should be invoked
-     * @param seed                            The seed which should be used to generate the constructor parameters
-     * @param tryComplexConstructorIfPossible If true, try largest constructor first
-     * @param <T>                             Return type
+     * @param c                          The class which should be invoked
+     * @param seed                       The seed which should be used to generate the constructor parameters
+     * @param tryComplexConstructorFirst If true, try largest constructor first
+     * @param <T>                        Return type
      * @return Initialized object
      */
-    public <T> T fill(Class c, String seed, boolean tryComplexConstructorIfPossible) {
+    public <T> T fill(Class c, String seed, boolean tryComplexConstructorFirst) {
         Function<String, Object> fun = providerMap.get(c.getName());
         if (fun != null) {
             return (T) fun.apply(seed);
         } else {
             LOGGER.finest("Could not find class in functionMap. Trying to invoke class by constructors.");
-            return generateTestDataByNonStandardClass(c, seed, tryComplexConstructorIfPossible);
+            return decideWhichKindOfComplexClassIsNeeded(c, seed, tryComplexConstructorFirst);
         }
     }
 
-    protected <T> T generateTestDataByNonStandardClass(Class c, String seed, boolean complex) {
+    protected <T> T decideWhichKindOfComplexClassIsNeeded(Class c, String seed, boolean complex) {
         if (Collection.class.isAssignableFrom(c)) {
             return (T) invokeCollectionInstance(c, seed);
         } else if (Map.class.isAssignableFrom(c)) {
             return (T) invokeMapInstance(c, seed);
         } else if (c.isArray()) {
-            Object objects = Array.newInstance(c.getComponentType(), LIST_ARRAY_ITEM_COUNT);
-            for (int i = 0; i < Array.getLength(objects); i++) {
-                Array.set(objects, i, fill(c.getComponentType(), seed + i, false));
-            }
-
-            return (T) objects;
-        } else {
-            return resolveComplexObject(c, seed, complex);
+            return invokeArrayInstance(c, seed);
+        } else {  // something else, try to invoke directly via constructor
+            return invokeComplexClass(c, seed, complex);
         }
     }
 
+    /**
+     * This method will invoke the right kind of array object for your array class
+     *
+     * @param c    An array class
+     * @param seed The seed which should be used for generating seeded data
+     * @return An instance of the provided class
+     */
+    private <T> T invokeArrayInstance(Class c, String seed) {
+        Object objects = Array.newInstance(c.getComponentType(), LIST_ARRAY_ITEM_COUNT);
+        for (int i = 0; i < Array.getLength(objects); i++) {
+            Array.set(objects, i, fill(c.getComponentType(), seed + i, false));
+        }
+
+        return (T) objects;
+    }
+
+    /**
+     * This method will invoke the right kind of collection object for your collection class
+     *
+     * @param c    A class which inherits collection
+     * @param seed The seed which should be used for generating seeded data
+     * @return An instance of the provided class
+     */
     private Collection invokeCollectionInstance(Class c, String seed) {
         Collection instance;
 
@@ -90,7 +143,7 @@ public class TestDataProvider {
         } else if (c.equals(Set.class)) {
             instance = new HashSet<>();
         } else {
-            instance = resolveComplexObject(c, seed, false);
+            instance = invokeComplexClass(c, seed, false);
         }
 
         if (instance != null) {
@@ -102,6 +155,13 @@ public class TestDataProvider {
         return instance;
     }
 
+    /**
+     * This method will invoke the right kind of map object for your map class
+     *
+     * @param c    A class which inherits map
+     * @param seed The seed which should be used for generating seeded data
+     * @return An instance of the provided class
+     */
     private Map invokeMapInstance(Class c, String seed) {
         Map instance;
 
@@ -112,7 +172,7 @@ public class TestDataProvider {
         } else if (c.equals(SortedMap.class) || c.equals(TreeMap.class)) { // TreeMap as it does not allow null values
             instance = new TreeMap();
         } else {
-            instance = resolveComplexObject(c, seed, false);
+            instance = invokeComplexClass(c, seed, false);
 
             if (instance != null) {
                 instance.put(null, null);
@@ -120,10 +180,6 @@ public class TestDataProvider {
         }
 
         return instance;
-    }
-
-    public static TestDataProvider getDefaultTestDataProvider() {
-        return new TestDataProvider(TestDataStatics.getCompleteDefaultMap());
     }
 
     /**
@@ -158,21 +214,11 @@ public class TestDataProvider {
         providerMap.putAll(customMap);
     }
 
-    private <T> T resolveComplexObject(Class c, String seed, boolean tryComplexConstructor) {
-        Constructor[] constructors = c.getConstructors();
-        Arrays.sort(constructors, tryComplexConstructor ? // tryComplexConstructor determines the sorted order
-                Comparator.comparingInt(con -> -con.getParameterCount()) :
-                Comparator.comparingInt(Constructor::getParameterCount));
-
-        for (Constructor constructor : constructors) {
+    private <T> T invokeComplexClass(Class c, String seed, boolean tryComplexConstructorFirst) {
+        for (Constructor constructor : getSortedConstructors(c, tryComplexConstructorFirst)) {
             if (Arrays.stream(constructor.getParameterTypes()).noneMatch(aClass -> aClass.equals(c))) {
                 try {
-                    // try create a arguments array which can be used to invoke the constructor
-                    Object[] args = IntStream.range(0, constructor.getParameterCount())
-                            .mapToObj(i -> fill(constructor.getParameterTypes()[i], seed + i, tryComplexConstructor))
-                            .toArray();
-
-                    return (T) (args.length == 0 ? constructor.newInstance() : constructor.newInstance(args));
+                    return invokeComplexConstructorWithProviderData(seed, tryComplexConstructorFirst, constructor);
                 } catch (InvocationTargetException | IllegalAccessException |
                         InstantiationException | IllegalArgumentException e) {
                     LOGGER.fine("Could not initialize constructor " + constructor + " of class " + c.getName() +
@@ -181,19 +227,19 @@ public class TestDataProvider {
             }
         }
 
-        // Could not initialize class
-        StringBuilder message = new StringBuilder();
-        message.append("Could not initialize ");
-        message.append(c.getName());
-
-        if (c.getConstructors().length == 0) {
-            message.append("\nClass has no constructors.\nPlease refer to ");
-            message.append(GlobalStatics.TEST_DATA_PROVIDER_WIKI);
-            message.append(" to get an idea how to use customMaps to initialize the TestDataProvider");
-        }
-
-        LOGGER.warning(message::toString);
+        writeWarningLogCouldNotInitialize(c);
 
         return null;
+    }
+
+    public <T> T invokeComplexConstructorWithProviderData(String seed, boolean tryComplexConstructorFirst,
+                                                          Constructor constructor)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+        // try create a arguments array which can be used to invoke the constructor
+        Object[] args = IntStream.range(0, constructor.getParameterCount())
+                .mapToObj(i -> fill(constructor.getParameterTypes()[i], seed + i, tryComplexConstructorFirst))
+                .toArray();
+
+        return (T) (args.length == 0 ? constructor.newInstance() : constructor.newInstance(args));
     }
 }

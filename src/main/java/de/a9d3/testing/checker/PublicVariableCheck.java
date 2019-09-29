@@ -1,5 +1,6 @@
 package de.a9d3.testing.checker;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -19,21 +20,24 @@ public class PublicVariableCheck implements CheckerInterface {
 
     @Override
     public boolean check(Class c) {
-        return Arrays.stream(c.getDeclaredFields()).noneMatch(field -> {
-            if (Modifier.isPublic(field.getModifiers())) {
-                LOGGER.fine(() -> field + " is public.");
+        return Arrays.stream(c.getDeclaredFields()).noneMatch(
+                this::checkIfFieldDoesExposesPublicVariablesAndFinalStatic);
 
-                if (!(Modifier.isFinal(field.getModifiers()) && Modifier.isStatic(field.getModifiers()) &&
-                        allowStaticFinalPublicVariables)) {
-                    CheckerHelperFunctions.logFailedCheckerStep(LOGGER, field,
-                            "field is nonFinal or/and and nonStatic.");
+    }
 
-                    return true;
-                }
+    private boolean checkIfFieldDoesExposesPublicVariablesAndFinalStatic(Field field) {
+        if (Modifier.isPublic(field.getModifiers())) {
+            LOGGER.fine(() -> field + " is public.");
+
+            if (!(Modifier.isFinal(field.getModifiers()) &&
+                    Modifier.isStatic(field.getModifiers()) &&
+                    allowStaticFinalPublicVariables)) {
+                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, field,
+                        "field is nonFinal or/and and nonStatic.");
+
+                return true;
             }
-
-            return false;
-        });
-
+        }
+        return false;
     }
 }
