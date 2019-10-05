@@ -1,7 +1,7 @@
 package de.a9d3.testing.executer;
 
-import de.a9d3.testing.checker.CheckerInterface;
-import de.a9d3.testing.executer.exception.CheckerFailedException;
+import de.a9d3.testing.checks.CheckInterface;
+import de.a9d3.testing.executer.exception.CheckFailedException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,19 +20,19 @@ public class SingleThreadExecutorTest {
 
     @Test
     public void positiveTest() {
-        CheckerInterface checker1 = c -> true;
+        CheckInterface check1 = c -> true;
 
-        CheckerInterface checker2 = c -> true;
+        CheckInterface check2 = c -> true;
 
-        assertTrue(executor.execute(Object.class, Arrays.asList(checker1, checker2)));
+        assertTrue(executor.execute(Object.class, Arrays.asList(check1, check2)));
     }
 
-    @Test(expected = CheckerFailedException.class)
+    @Test(expected = CheckFailedException.class)
     public void negativeTest() {
-        CheckerInterface checker1 = c -> true;
+        CheckInterface check1 = c -> true;
 
-        CheckerInterface checker2 = c -> false;
+        CheckInterface check2 = c -> false;
 
-        executor.execute(Object.class, Arrays.asList(checker1, checker2));
+        executor.execute(Object.class, Arrays.asList(check1, check2));
     }
 }

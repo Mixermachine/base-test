@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.resource_classes.GetterIsSetterCheckNegativeTestClass;
 import de.a9d3.testing.resource_classes.GetterIsSetterCheckPositiveTestClass;
@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 public class GetterIsSetterCheckTest {
 
-    CheckerInterface check;
+    CheckInterface check;
 
     @Before
     public void setup() {

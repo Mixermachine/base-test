@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.resource_classes.EmptyCollectionNegativeTestClass;
 import de.a9d3.testing.resource_classes.EmptyCollectionPositiveTestClass;
@@ -9,20 +9,20 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class EmptyCollectionCheckTest {
-    private CheckerInterface checker;
+    private CheckInterface check;
 
     @Before
     public void setup() {
-        checker = new EmptyCollectionCheck();
+        check = new EmptyCollectionCheck();
     }
 
     @Test
     public void positiveTest() {
-        assertTrue(checker.check(EmptyCollectionPositiveTestClass.class));
+        assertTrue(check.check(EmptyCollectionPositiveTestClass.class));
     }
 
     @Test
     public void negativeTest() {
-        assertFalse(checker.check(EmptyCollectionNegativeTestClass.class));
+        assertFalse(check.check(EmptyCollectionNegativeTestClass.class));
     }
 }

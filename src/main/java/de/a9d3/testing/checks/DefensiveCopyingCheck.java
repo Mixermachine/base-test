@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.method.GetterSetterMatcher;
 import de.a9d3.testing.method.IsSetterMatcher;
@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-public class DefensiveCopyingCheck implements CheckerInterface {
+public class DefensiveCopyingCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(DefensiveCopyingCheck.class.getName());
 
     private TestDataProvider provider;
@@ -51,7 +51,7 @@ public class DefensiveCopyingCheck implements CheckerInterface {
             try {
                 return checkIfComplexClassImplementsDefensiveCopyingForMethodTuple(c, tuple);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple, e);
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, tuple, e);
             }
         }
         return true;
@@ -70,7 +70,7 @@ public class DefensiveCopyingCheck implements CheckerInterface {
         boolean result = data == tuple.getA().invoke(a);
 
         if (result) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple,
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, tuple,
                     "Returned object is the same object which was previously set.");
         }
 

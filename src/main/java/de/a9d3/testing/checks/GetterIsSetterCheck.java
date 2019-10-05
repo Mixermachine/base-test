@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.method.GetterSetterMatcher;
 import de.a9d3.testing.method.IsSetterMatcher;
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GetterIsSetterCheck implements CheckerInterface {
+public class GetterIsSetterCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(GetterIsSetterCheck.class.getName());
 
     private TestDataProvider provider;
@@ -76,13 +76,13 @@ public class GetterIsSetterCheck implements CheckerInterface {
             tuple.getB().invoke(instance, data);
 
             if (!data.equals(tuple.getA().invoke(instance))) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, tuple,
                         "Getter return value did not match previously set value.");
 
                 return true;
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, tuple, "Failed to invoke. See exception.");
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, tuple, "Failed to invoke. See exception.");
 
             return true;
         }
