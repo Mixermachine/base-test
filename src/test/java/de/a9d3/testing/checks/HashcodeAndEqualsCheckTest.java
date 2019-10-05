@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.resource_classes.*;
 import org.junit.Before;
@@ -8,41 +8,41 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class HashcodeAndEqualsCheckTest {
-    private CheckerInterface checker;
+    private CheckInterface check;
 
     @Before
     public void setup() {
-        checker = new HashcodeAndEqualsCheck();
+        check = new HashcodeAndEqualsCheck();
     }
 
     @Test
     public void positiveTest() {
-        assertTrue(checker.check(HashCodeAndEqualsCheckPositiveTestClass.class));
+        assertTrue(check.check(HashCodeAndEqualsCheckPositiveTestClass.class));
     }
 
     @Test
     public void negativeFirstTest() {
-        assertFalse(checker.check(HashCodeAndEqualsCheckNegativeFirstTestClass.class));
+        assertFalse(check.check(HashCodeAndEqualsCheckNegativeFirstTestClass.class));
     }
 
     @Test
     public void negativeSecondTest() {
-        assertFalse(checker.check(HashCodeAndEqualsCheckNegativeSecondTestClass.class));
+        assertFalse(check.check(HashCodeAndEqualsCheckNegativeSecondTestClass.class));
     }
 
     @Test
     public void booleanValueTest() {
         // previously boolean values could inflict a failed test
-        assertTrue(checker.check(HashCodeAndEqualsCheckBooleanTestClass.class));
+        assertTrue(check.check(HashCodeAndEqualsCheckBooleanTestClass.class));
     }
 
     @Test
     public void sameObjectTest() {
-        assertFalse(checker.check(HashCodeAndEqualsCheckSameObjectTestClass.class));
+        assertFalse(check.check(HashCodeAndEqualsCheckSameObjectTestClass.class));
     }
 
     @Test
     public void differentClassTest() {
-        assertFalse(checker.check(HashCodeAndEqualsCheckDifferentClassTestClass.class));
+        assertFalse(check.check(HashCodeAndEqualsCheckDifferentClassTestClass.class));
     }
 }

@@ -1,9 +1,9 @@
 package de.a9d3.testing.tuple;
 
-import de.a9d3.testing.checker.EmptyCollectionCheck;
-import de.a9d3.testing.checker.GetterIsSetterCheck;
-import de.a9d3.testing.checker.HashcodeAndEqualsCheck;
-import de.a9d3.testing.checker.PublicVariableCheck;
+import de.a9d3.testing.checks.EmptyCollectionCheck;
+import de.a9d3.testing.checks.GetterIsSetterCheck;
+import de.a9d3.testing.checks.HashcodeAndEqualsCheck;
+import de.a9d3.testing.checks.PublicVariableCheck;
 import de.a9d3.testing.executer.SingleThreadExecutor;
 import de.a9d3.testing.testdata.TestDataProvider;
 import org.junit.Test;

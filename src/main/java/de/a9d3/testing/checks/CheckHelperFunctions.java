@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.testdata.TestDataProvider;
 
@@ -6,25 +6,25 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
-public final class CheckerHelperFunctions {
-    private CheckerHelperFunctions() {
+public final class CheckHelperFunctions {
+    private CheckHelperFunctions() {
         // should not be initialized
     }
 
-    public static void logFailedCheckerStep(Logger logger, Object testedObject) {
-        logFailedCheckerStep(logger, testedObject, null, null);
+    public static void logFailedCheckStep(Logger logger, Object testedObject) {
+        logFailedCheckStep(logger, testedObject, null, null);
     }
 
-    public static void logFailedCheckerStep(Logger logger, Object testedObject, String message) {
-        logFailedCheckerStep(logger, testedObject, message, null);
+    public static void logFailedCheckStep(Logger logger, Object testedObject, String message) {
+        logFailedCheckStep(logger, testedObject, message, null);
     }
 
-    public static void logFailedCheckerStep(Logger logger, Object testedObject, Exception exception) {
-        logFailedCheckerStep(logger, testedObject, null, exception);
+    public static void logFailedCheckStep(Logger logger, Object testedObject, Exception exception) {
+        logFailedCheckStep(logger, testedObject, null, exception);
     }
 
-    public static void logFailedCheckerStep(Logger logger, Object testedObject, String message,
-                                            Exception exception) {
+    public static void logFailedCheckStep(Logger logger, Object testedObject, String message,
+                                          Exception exception) {
         StringBuilder builder = new StringBuilder();
         builder.append("Check for ");
         builder.append(testedObject);

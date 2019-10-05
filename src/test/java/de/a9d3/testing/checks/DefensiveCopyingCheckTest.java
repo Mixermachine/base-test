@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.resource_classes.DefensiveCopyingCheckMutableTestClass;
 import de.a9d3.testing.resource_classes.DefensiveCopyingCheckOnlyImmutableTestClass;
@@ -9,20 +9,20 @@ import static org.junit.Assert.assertTrue;
 
 public class DefensiveCopyingCheckTest {
 
-    CheckerInterface checker;
+    CheckInterface check;
 
     @Before
     public void setup() {
-        checker = new DefensiveCopyingCheck();
+        check = new DefensiveCopyingCheck();
     }
 
     @Test
     public void positiveOnlyImmutableTest() {
-        assertTrue(checker.check(DefensiveCopyingCheckOnlyImmutableTestClass.class));
+        assertTrue(check.check(DefensiveCopyingCheckOnlyImmutableTestClass.class));
     }
 
     @Test
     public void positiveMutable() {
-        assertTrue(checker.check(DefensiveCopyingCheckMutableTestClass.class));
+        assertTrue(check.check(DefensiveCopyingCheckMutableTestClass.class));
     }
 }

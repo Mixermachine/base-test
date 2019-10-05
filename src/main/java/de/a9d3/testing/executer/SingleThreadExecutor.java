@@ -1,7 +1,7 @@
 package de.a9d3.testing.executer;
 
-import de.a9d3.testing.checker.CheckerInterface;
-import de.a9d3.testing.executer.exception.CheckerFailedException;
+import de.a9d3.testing.checks.CheckInterface;
+import de.a9d3.testing.executer.exception.CheckFailedException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +17,8 @@ public class SingleThreadExecutor implements Executor {
         builder.append(testClass.getName());
         builder.append("\n");
 
-        executionLog.forEach((checker, log) -> {
-            builder.append(checker);
+        executionLog.forEach((check, log) -> {
+            builder.append(check);
             builder.append(": ");
             builder.append(log);
             builder.append("\n");
@@ -27,13 +27,13 @@ public class SingleThreadExecutor implements Executor {
         return builder.toString();
     }
 
-    public Boolean execute(Class c, List<CheckerInterface> checkers) {
+    public Boolean execute(Class c, List<CheckInterface> checks) {
         Map<String, String> executionLog = new HashMap<>();
         boolean failed = false;
 
-        for (CheckerInterface checker : checkers) {
-            boolean result = checker.check(c);
-            executionLog.put(checker.getClass().getName(), result ?
+        for (CheckInterface check : checks) {
+            boolean result = check.check(c);
+            executionLog.put(check.getClass().getName(), result ?
                     "Passed ✔️" : "Failed ❌");
 
             if (!result) {
@@ -42,7 +42,7 @@ public class SingleThreadExecutor implements Executor {
         }
 
         if (failed) {
-            throw new CheckerFailedException(executionLogToString(c, executionLog));
+            throw new CheckFailedException(executionLogToString(c, executionLog));
         }
 
         LOGGER.info(() -> executionLogToString(c, executionLog));

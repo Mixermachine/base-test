@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 
 import de.a9d3.testing.GlobalStatics;
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class EmptyCollectionCheck implements CheckerInterface {
+public class EmptyCollectionCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(EmptyCollectionCheck.class.getName());
 
     private TestDataProvider provider;
@@ -33,13 +33,13 @@ public class EmptyCollectionCheck implements CheckerInterface {
             boolean returnedNull = getter.invoke(instance) == null;
 
             if (returnedNull) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, getter,
                         "Returned null instead of empty object.");
             }
 
             return returnedNull;
         } catch (IllegalAccessException | InvocationTargetException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter, e);
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, getter, e);
         }
 
         return true;
@@ -54,7 +54,7 @@ public class EmptyCollectionCheck implements CheckerInterface {
                     .filter(getter -> checkIfListOrMap(getter.getReturnType()))
                     .noneMatch(getter -> checkIfCollectionReturnsNull(instance, getter));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c,
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, c,
                     "Could not initialize class with internal null variables. You might need a custom " +
                             "TestDataProvider. See " + GlobalStatics.TEST_DATA_PROVIDER_WIKI, e);
         }

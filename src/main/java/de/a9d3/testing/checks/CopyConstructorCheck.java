@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.method_extractor.GetterIsSetterExtractor;
 import de.a9d3.testing.testdata.TestDataProvider;
@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
-public class CopyConstructorCheck implements CheckerInterface {
+public class CopyConstructorCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(CopyConstructorCheck.class.getName());
 
     private TestDataProvider provider;
@@ -38,7 +38,7 @@ public class CopyConstructorCheck implements CheckerInterface {
         try {
             copyConstructor = c.getConstructor(c);
         } catch (NoSuchMethodException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c, "No copy constructor found", e);
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, c, "No copy constructor found", e);
 
             return false;
         }
@@ -47,7 +47,7 @@ public class CopyConstructorCheck implements CheckerInterface {
         try {
             a = fillClassWithAsMuchDataAsPossible(c);
         } catch (InvocationTargetException | IllegalAccessException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c, "Failed to fill object of class.", e);
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, c, "Failed to fill object of class.", e);
 
             return false;
         }
@@ -56,7 +56,7 @@ public class CopyConstructorCheck implements CheckerInterface {
         try {
             b = copyConstructor.newInstance(a);
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c, "Failed to invoke copy constructor.", e);
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, c, "Failed to invoke copy constructor.", e);
 
             return false;
         }
@@ -66,21 +66,21 @@ public class CopyConstructorCheck implements CheckerInterface {
                 return false;
             }
         } catch (InvocationTargetException | IllegalAccessException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c, "Failed to compare object ");
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, c, "Failed to compare object ");
 
             return false;
         }
 
         if (!ignoreHashcodeAndEquals) {
             if (!a.equals(b)) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, c,
                         "Copied object is not equal to original object.");
 
                 return false;
             }
 
             if (a.hashCode() != b.hashCode()) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, c,
                         "Hashcode of copied object did not equal the hashcode of original object");
 
                 return false;
@@ -96,7 +96,7 @@ public class CopyConstructorCheck implements CheckerInterface {
         int iter = 0;
 
         for (Method setter : GetterIsSetterExtractor.getSetter(c)) {
-            CheckerHelperFunctions.executeSetter(provider, setter, obj, iter++);
+            CheckHelperFunctions.executeSetter(provider, setter, obj, iter++);
         }
 
         return obj;
@@ -109,7 +109,7 @@ public class CopyConstructorCheck implements CheckerInterface {
             Object bReturn = getter.invoke(b);
 
             if (aReturn == null || !aReturn.equals(bReturn)) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, getter,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, getter,
                         "Getter did not return same value");
 
 

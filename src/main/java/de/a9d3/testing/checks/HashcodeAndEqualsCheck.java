@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.GlobalStatics;
 import de.a9d3.testing.method_extractor.GetterIsSetterExtractor;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
-public class HashcodeAndEqualsCheck implements CheckerInterface {
+public class HashcodeAndEqualsCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(HashcodeAndEqualsCheck.class.getName());
 
     private TestDataProvider provider;
@@ -27,13 +27,13 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
     private static boolean defaultObjectsShouldBeEqualToAnother(Class c, Object a, Object b) {
         try {
             if (!(areEqual(a, b) && haveEqualHashCode(c, a, b))) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, "Default object should equal",
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, "Default object should equal",
                         "Objects with internal null variables did not equal.");
 
                 return true;
             }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c, e);
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, c, e);
         }
         return false;
     }
@@ -78,7 +78,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
 
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, c,
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, c,
                     "Could not initialize class with internal null variables. You might need a custom " +
                             "TestDataProvider. See " + GlobalStatics.TEST_DATA_PROVIDER_WIKI, e);
 
@@ -90,18 +90,18 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
 
     private boolean checkIfEqualsAndHashcodeReactToSetter(Class c, Object a, Object b, int iter, Method mySetter) {
         try {
-            CheckerHelperFunctions.executeSetter(provider, mySetter, a, iter);
+            CheckHelperFunctions.executeSetter(provider, mySetter, a, iter);
 
             // Check same object
             if (!(areEqual(a, a))) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, mySetter,
                         "Object should be equal to it self (same pointer).");
 
                 return false;
             }
 
             if (areEqual(a, null)) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, mySetter,
                         "Object should not be equal to null");
 
                 return false;
@@ -110,7 +110,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
             // Check different class. Guarantee to always use a different class
             // Nothing special about String, it's just not the Class Object
             if (areEqual(a, mySetter.getParameterTypes()[0].equals(Object.class) ? String.class : Object.class)) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, mySetter,
                         "Comparison with Object of different class should return false.");
 
                 return false;
@@ -118,7 +118,7 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
 
             // Should not equal with different internal states
             if (areEqual(a, b) || haveEqualHashCode(c, a, b)) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, mySetter,
                         "Two objects with different states (one with setter invoked) should not equal or " +
                                 "have equal hashCode.");
 
@@ -126,18 +126,18 @@ public class HashcodeAndEqualsCheck implements CheckerInterface {
             }
 
             // Set setter in second object
-            CheckerHelperFunctions.executeSetter(provider, mySetter, b, iter);
+            CheckHelperFunctions.executeSetter(provider, mySetter, b, iter);
 
             // Should equal with same internal state
             if (!areEqual(a, b) || !haveEqualHashCode(c, a, b)) {
-                CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter,
+                CheckHelperFunctions.logFailedCheckStep(LOGGER, mySetter,
                         "Objects with same internal states should equal and have same hashCode");
 
                 return false;
             }
 
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            CheckerHelperFunctions.logFailedCheckerStep(LOGGER, mySetter, e);
+            CheckHelperFunctions.logFailedCheckStep(LOGGER, mySetter, e);
         }
 
         return true;

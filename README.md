@@ -15,9 +15,9 @@ To meet the second goal no external libraries are used and all functionality ste
 <br/>
 The project is tested on three environments (oraclejdk11, openjdk8, openjdk11 all on Travis Ubuntu Bionic).
 
-## Checkers
+## Checks
 Many parts of this project can be used on their own, but I understand that you simply want to get done with the annoying base test stuff.
-Therefore I created checkers that help you to quickly test your code.
+Therefore I created checks that help you to quickly test your code.
 
 ### GetterIsSetterCheck
 Getter/Is and Setter methods are often overlooked and annoying to test.
@@ -43,11 +43,11 @@ On the same note, a public variable allows for unsupervised external changes.
 This class will check if any public variables are presented.
 
 # Quick start
-Ok let's get dirty. In the code block below we will test the class Example with all available Checkers.
+Ok let's get dirty. In the code block below we will test the class Example with all available checks.
 ```
 package de.example.test
 
-import de.a9d3.testing.checker.*;
+import de.a9d3.testing.checks.*;
 import de.a9d3.testing.executer.SingleThreadExecutor;
 
 import org.junit.Test; (example uses JUnit4)

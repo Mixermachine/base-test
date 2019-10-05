@@ -1,4 +1,4 @@
-package de.a9d3.testing.checker;
+package de.a9d3.testing.checks;
 
 import de.a9d3.testing.resource_classes.CopyConstructorCheckNegativeTestClass;
 import de.a9d3.testing.resource_classes.CopyConstructorCheckPositiveTestClass;
@@ -11,38 +11,38 @@ import static org.junit.Assert.assertTrue;
 
 public class CopyConstructorCheckTest {
 
-    private CheckerInterface checker;
+    private CheckInterface check;
 
     @Before
     public void setup() {
-        checker = new CopyConstructorCheck();
+        check = new CopyConstructorCheck();
     }
 
     @Test
     public void positiveTest() {
-        assertTrue(checker.check(CopyConstructorCheckPositiveTestClass.class));
+        assertTrue(check.check(CopyConstructorCheckPositiveTestClass.class));
     }
 
     @Test
     public void withoutEqualsAndHashcode() {
-        assertFalse(checker.check(CopyConstructorCheckWithoutEqualsAndHashcodeTestClass.class));
+        assertFalse(check.check(CopyConstructorCheckWithoutEqualsAndHashcodeTestClass.class));
 
-        checker = new CopyConstructorCheck(true);
-        assertTrue(checker.check(CopyConstructorCheckWithoutEqualsAndHashcodeTestClass.class));
+        check = new CopyConstructorCheck(true);
+        assertTrue(check.check(CopyConstructorCheckWithoutEqualsAndHashcodeTestClass.class));
     }
 
     @Test
     public void negativeTest() {
-        assertFalse(checker.check(CopyConstructorCheckNegativeTestClass.class));
+        assertFalse(check.check(CopyConstructorCheckNegativeTestClass.class));
     }
 
     @Test
     public void noCopyConstructorTest() {
         // this test does not have a copyConstructor. Should instantly return false.
-        assertFalse(checker.check(CopyConstructorCheckTest.class));
+        assertFalse(check.check(CopyConstructorCheckTest.class));
 
         // even without provider (also increases test coverage)
-        checker = new CopyConstructorCheck(null);
-        assertFalse(checker.check(CopyConstructorCheckTest.class));
+        check = new CopyConstructorCheck(null);
+        assertFalse(check.check(CopyConstructorCheckTest.class));
     }
 }
