@@ -38,13 +38,9 @@ public class GetterIsSetterCheck implements CheckInterface {
     }
 
     public GetterIsSetterCheck(TestDataProvider provider, String regexExcluded) {
-        this(provider, regexExcluded, "48107951-0256-4a84-9f8e-132ee651ae9e");
-    }
-
-    public GetterIsSetterCheck(TestDataProvider provider, String regexExcluded, String seed) {
         this.provider = provider;
         this.regexExcluded = regexExcluded;
-        this.seed = seed;
+        this.seed = "48107951-0256-4a84-9f8e-132ee651ae9e";
     }
 
     @Override
