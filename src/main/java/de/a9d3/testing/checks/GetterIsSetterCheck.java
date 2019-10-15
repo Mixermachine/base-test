@@ -20,6 +20,11 @@ public class GetterIsSetterCheck implements CheckInterface {
     private String regexExcluded;
     private String seed;
 
+    /**
+     * Getter/Is and Setter methods are often overlooked and annoying to test.
+     * This checkClass will execute setter and getter/is methods and compare the results.
+     * Initialize empty, with custom TestDataProvider and/or regexExclude String (excludes certain getter/setter pairs)
+     */
     public GetterIsSetterCheck() {
         this("");
     }

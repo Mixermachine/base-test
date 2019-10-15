@@ -16,6 +16,12 @@ public class HashcodeAndEqualsCheck implements CheckInterface {
 
     private TestDataProvider provider;
 
+    /**
+     * HashCode and equals methods compare the states of two objects with each other.
+     * A broken implementation can introduce bugs.
+     * This checkClass will check if the hashCode and equals methods react to changes in the state of the objects.
+     * Initialize empty or with custom TestDataProvider
+     */
     public HashcodeAndEqualsCheck() {
         this(new TestDataProvider());
     }

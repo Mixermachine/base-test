@@ -10,6 +10,13 @@ public class PublicVariableCheck implements CheckInterface {
 
     private Boolean allowStaticFinalPublicVariables;
 
+    /**
+     * Openly accessible variables can make the internal state of an object unpredictable and may lead to well
+     * hidden bugs. Hide variables with getter/setters where possible and employ checks in these methods to make sure,
+     * your object is functional after the execution.
+     * This checkClass will check if any public variables are presented.
+     * Initialize empty or with allowStaticFinalPublicVariables true to allow public static final variables.
+     */
     public PublicVariableCheck() {
         this(false);
     }

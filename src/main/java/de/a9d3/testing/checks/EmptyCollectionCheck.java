@@ -16,6 +16,13 @@ public class EmptyCollectionCheck implements CheckInterface {
 
     private TestDataProvider provider;
 
+    /**
+     * When for example working with lists in objects a calling program has to check for null, emptyList and list
+     * with a payload. We cut away the null pointer check if the object never returns a null pointer for a collection
+     * (edge cases exist where a null pointer is truly wanted).
+     * This checkClass will collect all getter methods with a collection as return type returns no null pointer.
+     * Initialize empty or with custom TestDataProvider
+     */
     public EmptyCollectionCheck() {
         this(new TestDataProvider());
     }

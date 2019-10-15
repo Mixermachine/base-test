@@ -15,6 +15,14 @@ public class DefensiveCopyingCheck implements CheckInterface {
 
     private TestDataProvider provider;
 
+    /**
+     * Working with many objects in a large project can become quite complex and error-prone.
+     * We can reduce this complexity if we take away the possibility to change the internal state of an object via a
+     * returned pointer by always returning a copy of mutable objects instead of directly returning the object.
+     * A modification of the state should only be possible via the offered methods (edge cases exist of course).
+     * This checkClass will compare the pointers of return/parameter values of the getter/is and setter methods.
+     * Initialize empty or with custom TestDataProvider
+     */
     public DefensiveCopyingCheck() {
         this(new TestDataProvider());
     }

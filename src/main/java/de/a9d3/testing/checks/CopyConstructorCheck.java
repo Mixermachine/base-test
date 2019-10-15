@@ -14,6 +14,15 @@ public class CopyConstructorCheck implements CheckInterface {
     private TestDataProvider provider;
     private boolean ignoreHashcodeAndEquals;
 
+    /**
+     * Complex objects sometimes need to be copied (especially when you apply defensive copying) and thus we create
+     * copyConstructors. These constructors are often forgotten when it comes to refactoring/adding new variables to
+     * the class.
+     * This checkClass will check if the copyConstructors copies all objects correctly
+     * (needs equals methods at least in the classes of the inner variables).
+     * Initialize empty, with custom TestDataProvider and/or ignoreHashcodeAndEquals boolean
+     * (disables hashcode and equals check)
+     */
     public CopyConstructorCheck() {
         this(new TestDataProvider(), false);
     }
