@@ -5,8 +5,9 @@
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
-    <description>A project that helps you to test your java classes for basic things like getter==setter,
-        hashCode and equals. Also provides a convenient to instantiate classes with partially random data
+    <description>A project which helps you testing your java classes for basic things like getter==setter,
+        hashCode and equals methods and other programming schemas.
+        Also provides a convenient way to instantiate classes with seeded random data.
     </description>
 
     <name>base-test</name>
