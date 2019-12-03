@@ -18,7 +18,7 @@ It should be very lightweight and fast to execute on nearly every system.
 <dependency>
   <groupId>de.a9d3.testing</groupId>
   <artifactId>base-test</artifactId>
-  <version>0.0.6</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 Other build system in the [wiki](https://github.com/Mixermachine/base-test/wiki/Download-and-Install)
