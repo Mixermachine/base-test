@@ -3,8 +3,8 @@ dist: xenial
 os:
   - linux
 jdk:
-  - oraclejdk11
   - openjdk8
+  - openjdk10
   - openjdk11
 addons:
   sonarcloud:
