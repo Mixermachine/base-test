@@ -10,8 +10,12 @@ Additionally, this library should make it easier for you to instantiate classes 
 Simply execute fill(*yourClass*, true) on an object of the class TestDataProvider and see what you get back :).
 
 <br/>
-This project is tested on three environments (oraclejdk11, openjdk8, openjdk11 all on Travis Ubuntu Bionic) and uses no external libs except for JUnit 4 in the testing phase.
+This project is tested on three environments (openjdk8, openjdk10, openjdk11 all on Travis Ubuntu Xenial) and uses no external libs except for JUnit 4 in the testing phase.
 It should be very lightweight and fast to execute on nearly every system.
+
+Sadly Travis needed to [drop the support for the Oracle JDK](https://github.com/sormuras/bach/issues/56) due to license changes by Oracle
+and thus this project is no longer tested on this JDK.
+Nonetheless it should still work. If you notice odd behaviour, please report it in an issue.
 
 ## Maven dependency
 ```
