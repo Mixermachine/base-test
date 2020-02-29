@@ -82,6 +82,8 @@ public class ToStringCheck implements CheckInterface {
             } catch (IllegalAccessException e) {
                 LOGGER.severe("Could not access inner field. Exception e:" + e);
                 return false;
+            } finally {
+                field.setAccessible(false);
             }
 
             if (!resultString.contains(fieldValue.toString())) {
