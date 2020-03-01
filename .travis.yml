@@ -8,6 +8,11 @@ jdk:
   - openjdk11
   - openjdk13
   - openjdk-ea
+
+matrix:
+  allow_failures:
+    - jdk: openjdk-ea
+
 addons:
   sonarcloud:
     organization: "base-test"
