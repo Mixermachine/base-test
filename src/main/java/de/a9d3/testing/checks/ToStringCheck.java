@@ -40,6 +40,7 @@ public class ToStringCheck implements CheckInterface {
         Pattern pattern = Pattern.compile(regexExcluded);
 
         return Arrays.stream(c.getDeclaredFields())
+                .filter(x -> !x.isSynthetic()) // need to ignore synthetic fields like $jacocoData
                 .filter(x -> !pattern.matcher(x.getName()).matches())
                 .collect(Collectors.toList());
     }
@@ -87,7 +88,7 @@ public class ToStringCheck implements CheckInterface {
             }
 
             if (!resultString.contains(fieldValue.toString())) {
-                LOGGER.severe("Field: " + field.getName() + " was not included in String. " +
+                LOGGER.severe(() -> "Field: " + field.getName() + " was not included in String. " +
                         "Field value: " + fieldValue + ", toStringValue: " + resultString);
                 return false;
             }
