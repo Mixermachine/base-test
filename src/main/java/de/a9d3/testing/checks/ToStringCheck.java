@@ -63,6 +63,12 @@ public class ToStringCheck implements CheckInterface {
             return false;
         }
         Object initializedClass = provider.fill(c, seed, true);
+
+        if (initializedClass == null) {
+            LOGGER.severe(() -> "Class could not be initialized.");
+            return false;
+        }
+
         Object resultObject;
         try {
             resultObject = toStringMethod.invoke(initializedClass);
