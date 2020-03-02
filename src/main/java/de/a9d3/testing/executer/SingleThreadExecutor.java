@@ -13,7 +13,7 @@ public class SingleThreadExecutor implements Executor {
 
     private static String executionLogToString(Class testClass, Map<String, String> executionLog) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Tested ");
+        builder.append("Test report for : ");
         builder.append(testClass.getName());
         builder.append("\n");
 
@@ -32,9 +32,16 @@ public class SingleThreadExecutor implements Executor {
         boolean failed = false;
 
         for (CheckInterface check : checks) {
+            String name = check.getClass().getName();
+            LOGGER.info(() -> "*** Executing " + name + " ***");
+
             boolean result = check.check(c);
-            executionLog.put(check.getClass().getName(), result ?
-                    "Passed ✔️" : "Failed ❌");
+
+            String resultMsg = result ? "Passed ✔️" : "Failed ❌";
+
+            LOGGER.info(() -> "*** Test " + resultMsg + " ***");
+            LOGGER.info(() -> "**********************");
+            executionLog.put(name, resultMsg);
 
             if (!result) {
                 failed = true;
