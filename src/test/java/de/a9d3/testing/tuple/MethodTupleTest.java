@@ -1,9 +1,6 @@
 package de.a9d3.testing.tuple;
 
-import de.a9d3.testing.checks.EmptyCollectionCheck;
-import de.a9d3.testing.checks.GetterIsSetterCheck;
-import de.a9d3.testing.checks.HashcodeAndEqualsCheck;
-import de.a9d3.testing.checks.PublicVariableCheck;
+import de.a9d3.testing.checks.*;
 import de.a9d3.testing.executer.SingleThreadExecutor;
 import de.a9d3.testing.testdata.TestDataProvider;
 import org.junit.Test;
@@ -35,6 +32,7 @@ public class MethodTupleTest {
         // no defensive copying as tuple should be lightweight
         assertTrue(executor.execute(MethodTuple.class, Arrays.asList(
                 new EmptyCollectionCheck(provider), new GetterIsSetterCheck(provider),
-                new HashcodeAndEqualsCheck(provider), new PublicVariableCheck())));
+                new HashcodeAndEqualsCheck(provider), new PublicVariableCheck(),
+                new ToStringCheck(provider))));
     }
 }

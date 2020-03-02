@@ -26,6 +26,10 @@ public class ToStringCheck implements CheckInterface {
         this(new TestDataProvider(), regexExcluded);
     }
 
+    public ToStringCheck(TestDataProvider provider) {
+        this(provider, "");
+    }
+
     public ToStringCheck(TestDataProvider testDataProvider, String regexExcluded) {
         this(testDataProvider, regexExcluded, "720f7f56-12fa-47cf-9a16-ea9c38675b74");
     }
