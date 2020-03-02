@@ -23,6 +23,13 @@ public class ToStringCheckTest {
     }
 
     @Test
+    public void positiveExclusionsTest() {
+        // excluding d fields which is not in toString method()
+        check = new ToStringCheck("d");
+        assertTrue(check.check(ToStringCheckNegativeClass.class));
+    }
+
+    @Test
     public void negativeTest() {
         assertFalse(check.check(ToStringCheckNegativeClass.class));
     }
