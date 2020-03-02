@@ -26,6 +26,10 @@ public class ToStringCheck implements CheckInterface {
         this(new TestDataProvider(), regexExcluded);
     }
 
+    public ToStringCheck(TestDataProvider provider) {
+        this(provider, "");
+    }
+
     public ToStringCheck(TestDataProvider testDataProvider, String regexExcluded) {
         this(testDataProvider, regexExcluded, "720f7f56-12fa-47cf-9a16-ea9c38675b74");
     }
@@ -59,6 +63,12 @@ public class ToStringCheck implements CheckInterface {
             return false;
         }
         Object initializedClass = provider.fill(c, seed, true);
+
+        if (initializedClass == null) {
+            LOGGER.severe(() -> "Class could not be initialized.");
+            return false;
+        }
+
         Object resultObject;
         try {
             resultObject = toStringMethod.invoke(initializedClass);
