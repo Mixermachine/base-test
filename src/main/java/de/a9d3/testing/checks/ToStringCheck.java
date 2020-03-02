@@ -77,11 +77,6 @@ public class ToStringCheck implements CheckInterface {
             return false;
         }
 
-        if (!(resultObject instanceof String)) {
-            LOGGER.severe("ToString method did not return object of type String");
-            return false;
-        }
-
         String resultString = (String) resultObject;
 
         for (Field field : fields) {
