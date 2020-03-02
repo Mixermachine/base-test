@@ -26,6 +26,7 @@ public class ToStringCheckTest {
     public void positiveExclusionsTest() {
         // excluding d fields which is not in toString method()
         check = new ToStringCheck("d");
+
         assertTrue(check.check(ToStringCheckNegativeClass.class));
     }
 
