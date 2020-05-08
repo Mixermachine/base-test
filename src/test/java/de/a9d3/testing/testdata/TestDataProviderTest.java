@@ -129,7 +129,7 @@ public class TestDataProviderTest {
         assertNotNull(instant);
     }
 
-    private void testManyIfNotNull(Class c) {
+    private void testManyIfNotNull(Class<?> c) {
         AtomicBoolean positive = new AtomicBoolean(true);
 
         IntStream.range(0, TestDataProviderTest.MANY_ITERATIONS_QUANTITY).forEach(integer ->
@@ -149,7 +149,7 @@ public class TestDataProviderTest {
 
     @Test
     public void generateTestDataByClassMapTest() {
-        HashMap map = new HashMap<>();
+        HashMap<?, ?> map = new HashMap<>();
         map = provider.decideWhichKindOfComplexClassIsNeeded(map.getClass(), "123", false);
 
         assertNotNull(map);

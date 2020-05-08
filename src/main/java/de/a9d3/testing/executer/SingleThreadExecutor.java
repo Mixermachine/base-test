@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class SingleThreadExecutor implements Executor {
     private static final Logger LOGGER = Logger.getLogger(SingleThreadExecutor.class.getName());
 
-    private static String executionLogToString(Class testClass, Map<String, String> executionLog) {
+    private static String executionLogToString(Class<?> testClass, Map<String, String> executionLog) {
         StringBuilder builder = new StringBuilder();
         builder.append("Test report for : ");
         builder.append(testClass.getName());
@@ -27,7 +27,7 @@ public class SingleThreadExecutor implements Executor {
         return builder.toString();
     }
 
-    public Boolean execute(Class c, List<CheckInterface> checks) {
+    public Boolean execute(Class<?> c, List<CheckInterface> checks) {
         Map<String, String> executionLog = new HashMap<>();
         boolean failed = false;
 

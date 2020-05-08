@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 public class PublicVariableCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(PublicVariableCheck.class.getName());
 
-    private Boolean allowStaticFinalPublicVariables;
+    private final Boolean allowStaticFinalPublicVariables;
 
     /**
      * Openly accessible variables can make the internal state of an object unpredictable and may lead to well
@@ -26,7 +26,7 @@ public class PublicVariableCheck implements CheckInterface {
     }
 
     @Override
-    public boolean check(Class c) {
+    public boolean check(Class<?> c) {
         return Arrays.stream(c.getDeclaredFields()).noneMatch(
                 this::checkIfFieldDoesExposesPublicVariablesAndFinalStatic);
 

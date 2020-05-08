@@ -16,9 +16,9 @@ import java.util.stream.Stream;
 public class GetterIsSetterCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(GetterIsSetterCheck.class.getName());
 
-    private TestDataProvider provider;
-    private String regexExcluded;
-    private String seed;
+    private final TestDataProvider provider;
+    private final String regexExcluded;
+    private final String seed;
 
     /**
      * Getter/Is and Setter methods are often overlooked and annoying to test.
@@ -44,7 +44,7 @@ public class GetterIsSetterCheck implements CheckInterface {
     }
 
     @Override
-    public boolean check(Class c) {
+    public boolean check(Class<?> c) {
         MethodMatcherInterface getterSetterMatcher = new GetterSetterMatcher();
         MethodMatcherInterface isSetterMatcher = new IsSetterMatcher();
 
@@ -59,7 +59,7 @@ public class GetterIsSetterCheck implements CheckInterface {
         return check(c, tuples);
     }
 
-    public boolean check(Class c, List<MethodTuple> tuples) {
+    public boolean check(Class<?> c, List<MethodTuple> tuples) {
         Object instance = provider.fill(c, "test", true);
 
         for (int i = 0; i < tuples.size(); i++) {

@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 public class CopyConstructorCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(CopyConstructorCheck.class.getName());
 
-    private TestDataProvider provider;
-    private boolean ignoreHashcodeAndEquals;
+    private final TestDataProvider provider;
+    private final boolean ignoreHashcodeAndEquals;
 
     /**
      * Complex objects sometimes need to be copied (especially when you apply defensive copying) and thus we create
@@ -41,8 +41,8 @@ public class CopyConstructorCheck implements CheckInterface {
     }
 
     @Override
-    public boolean check(Class c) {
-        Constructor copyConstructor;
+    public boolean check(Class<?> c) {
+        Constructor<?> copyConstructor;
 
         try {
             copyConstructor = c.getConstructor(c);
@@ -99,7 +99,7 @@ public class CopyConstructorCheck implements CheckInterface {
         return true;
     }
 
-    private Object fillClassWithAsMuchDataAsPossible(Class c) throws InvocationTargetException, IllegalAccessException {
+    private Object fillClassWithAsMuchDataAsPossible(Class<?> c) throws InvocationTargetException, IllegalAccessException {
         Object obj = provider.fill(c, "ce47ddd6-315c-4687-867c-95be31afe9b5", false);
 
         int iter = 0;

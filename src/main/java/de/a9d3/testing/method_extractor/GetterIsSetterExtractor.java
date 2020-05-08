@@ -10,19 +10,19 @@ public class GetterIsSetterExtractor {
         // should not be invoke for now
     }
 
-    public static List<Method> getGetter(Class c) {
+    public static List<Method> getGetter(Class<?> c) {
         return MethodExtractor.extract(c, "^get");
     }
 
-    public static List<Method> getIs(Class c) {
+    public static List<Method> getIs(Class<?> c) {
         return MethodExtractor.extract(c, "^is");
     }
 
-    public static List<Method> getGetterAndIs(Class c) {
+    public static List<Method> getGetterAndIs(Class<?> c) {
         return Stream.concat(getGetter(c).stream(), getIs(c).stream()).collect(Collectors.toList());
     }
 
-    public static List<Method> getSetter(Class c) {
+    public static List<Method> getSetter(Class<?> c) {
         return MethodExtractor.extract(c, "^set");
     }
 }

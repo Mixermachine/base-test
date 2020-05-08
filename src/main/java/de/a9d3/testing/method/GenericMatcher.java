@@ -13,7 +13,7 @@ public class GenericMatcher {
         // should not be initialized
     }
 
-    public static List<MethodTuple> match(Class c, String aRegex, String bRegex) {
+    public static List<MethodTuple> match(Class<?> c, String aRegex, String bRegex) {
         List<Method> a = MethodExtractor.extract(c, aRegex);
         List<Method> b = MethodExtractor.extract(c, bRegex);
 

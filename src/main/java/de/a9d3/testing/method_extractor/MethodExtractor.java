@@ -12,7 +12,7 @@ public class MethodExtractor {
         // should not be invoke for now
     }
 
-    public static List<Method> extract(Class c, String regex) {
+    public static List<Method> extract(Class<?> c, String regex) {
         Predicate<String> pattern = Pattern.compile(regex).asPredicate();
         return Arrays.stream(c.getMethods()).filter(method -> pattern.test(method.getName()))
                 .collect(Collectors.toList());

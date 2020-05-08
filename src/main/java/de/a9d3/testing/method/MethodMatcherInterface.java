@@ -5,5 +5,5 @@ import de.a9d3.testing.tuple.MethodTuple;
 import java.util.List;
 
 public interface MethodMatcherInterface {
-    List<MethodTuple> match(Class c);
+    List<MethodTuple> match(Class<?> c);
 }
