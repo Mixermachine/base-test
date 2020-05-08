@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 public class DefensiveCopyingCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(DefensiveCopyingCheck.class.getName());
 
-    private TestDataProvider provider;
+    private final TestDataProvider provider;
 
     /**
      * Working with many objects in a large project can become quite complex and error-prone.
@@ -31,18 +31,18 @@ public class DefensiveCopyingCheck implements CheckInterface {
         this.provider = provider;
     }
 
-    private static boolean isPrimitiveWrapper(Class c) {
+    private static boolean isPrimitiveWrapper(Class<?> c) {
         return c == Double.class || c == Float.class || c == Long.class ||
                 c == Integer.class || c == Short.class || c == Character.class ||
                 c == Byte.class || c == Boolean.class;
     }
 
-    private static boolean isString(Class c) {
+    private static boolean isString(Class<?> c) {
         return c == String.class;
     }
 
     @Override
-    public boolean check(Class c) {
+    public boolean check(Class<?> c) {
         MethodMatcherInterface getterSetterMatcher = new GetterSetterMatcher();
         MethodMatcherInterface isSetterMatcher = new IsSetterMatcher();
 
@@ -50,8 +50,8 @@ public class DefensiveCopyingCheck implements CheckInterface {
                 .noneMatch(tuple -> checkIfClassImplementsDefensiveCopyingForMethodTuple(c, tuple));
     }
 
-    private boolean checkIfClassImplementsDefensiveCopyingForMethodTuple(Class c, MethodTuple tuple) {
-        Class myC = tuple.getA().getReturnType();
+    private boolean checkIfClassImplementsDefensiveCopyingForMethodTuple(Class<?> c, MethodTuple tuple) {
+        final Class<?> myC = tuple.getA().getReturnType();
 
         if (myC.isPrimitive() || isPrimitiveWrapper(myC) || isString(myC)) {
             return false;
@@ -65,7 +65,7 @@ public class DefensiveCopyingCheck implements CheckInterface {
         return true;
     }
 
-    private boolean checkIfComplexClassImplementsDefensiveCopyingForMethodTuple(Class c, MethodTuple tuple) throws IllegalAccessException, InvocationTargetException {
+    private boolean checkIfComplexClassImplementsDefensiveCopyingForMethodTuple(Class<?> c, MethodTuple tuple) throws IllegalAccessException, InvocationTargetException {
         // check if getter returns same item which has been previously set by
         Object a = provider.fill(c, "123", false);
 

@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 public class ToStringCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(ToStringCheck.class.getName());
 
-    private TestDataProvider provider;
-    private String regexExcluded;
-    private String seed;
+    private final TestDataProvider provider;
+    private final String regexExcluded;
+    private final String seed;
 
     public ToStringCheck() {
         this("");
@@ -40,7 +40,7 @@ public class ToStringCheck implements CheckInterface {
         this.seed = seed;
     }
 
-    private static List<Field> getMatchingFields(Class c, String regexExcluded) {
+    private static List<Field> getMatchingFields(Class<?> c, String regexExcluded) {
         Pattern pattern = Pattern.compile(regexExcluded);
 
         return Arrays.stream(c.getDeclaredFields())
@@ -50,11 +50,11 @@ public class ToStringCheck implements CheckInterface {
     }
 
     @Override
-    public boolean check(Class c) {
+    public boolean check(Class<?> c) {
         return check(c, getMatchingFields(c, regexExcluded));
     }
 
-    public boolean check(Class c, List<Field> fields) {
+    public boolean check(Class<?> c, List<Field> fields) {
         Method toStringMethod;
         try {
             toStringMethod = c.getMethod("toString");

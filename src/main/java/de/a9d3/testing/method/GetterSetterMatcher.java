@@ -6,7 +6,7 @@ import java.util.List;
 
 public class GetterSetterMatcher implements MethodMatcherInterface {
     @Override
-    public List<MethodTuple> match(Class c) {
+    public List<MethodTuple> match(Class<?> c) {
         return GenericMatcher.match(c, "^get", "^set");
     }
 }

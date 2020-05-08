@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class EmptyCollectionCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(EmptyCollectionCheck.class.getName());
 
-    private TestDataProvider provider;
+    private final TestDataProvider provider;
 
     /**
      * When for example working with lists in objects a calling program has to check for null, emptyList and list
@@ -31,7 +31,7 @@ public class EmptyCollectionCheck implements CheckInterface {
         this.provider = provider;
     }
 
-    private static boolean checkIfListOrMap(Class m) {
+    private static boolean checkIfListOrMap(Class<?> m) {
         return Collection.class.isAssignableFrom(m) || Map.class.isAssignableFrom(m);
     }
 
@@ -53,7 +53,7 @@ public class EmptyCollectionCheck implements CheckInterface {
     }
 
     @Override
-    public boolean check(Class c) {
+    public boolean check(Class<?> c) {
         try {
             Object instance = provider.fillMutableWithNull(c);
 

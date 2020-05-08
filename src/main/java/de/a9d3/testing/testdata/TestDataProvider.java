@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 public class TestDataProvider {
     protected static final int LIST_ARRAY_ITEM_COUNT = 2;
     private static final Logger LOGGER = Logger.getLogger(TestDataProvider.class.getName());
-    private Map<String, Function<String, Object>> providerMap;
+    private final Map<String, Function<String, Object>> providerMap;
 
     /**
      * This class will invoke classes with seeded data
@@ -57,7 +57,7 @@ public class TestDataProvider {
         return new TestDataProvider(TestDataStatics.getCompleteDefaultMap());
     }
 
-    private static void writeWarningLogCouldNotInitialize(Class c) {
+    private static void writeWarningLogCouldNotInitialize(Class<?> c) {
         // Could not initialize class
         StringBuilder message = new StringBuilder();
         message.append("Could not initialize ");
@@ -72,8 +72,8 @@ public class TestDataProvider {
         LOGGER.warning(message::toString);
     }
 
-    private static Constructor[] getSortedConstructors(Class c, boolean tryComplexConstructorFirst) {
-        Constructor[] constructors = c.getConstructors();
+    private static Constructor<?>[] getSortedConstructors(Class<?> c, boolean tryComplexConstructorFirst) {
+        Constructor<?>[] constructors = c.getConstructors();
         Arrays.sort(constructors, tryComplexConstructorFirst ? // tryComplexConstructorFirst determines the sorted order
                 Comparator.comparingInt(con -> -con.getParameterCount()) :
                 Comparator.comparingInt(Constructor::getParameterCount));
@@ -89,7 +89,7 @@ public class TestDataProvider {
      * @param <T>                        Return type
      * @return Initialized object
      */
-    public <T> T fill(Class c, String seed, boolean tryComplexConstructorFirst) {
+    public <T> T fill(Class<?> c, String seed, boolean tryComplexConstructorFirst) {
         Function<String, Object> fun = providerMap.get(c.getName());
         if (fun != null) {
             return (T) fun.apply(seed);
@@ -99,7 +99,7 @@ public class TestDataProvider {
         }
     }
 
-    protected <T> T decideWhichKindOfComplexClassIsNeeded(Class c, String seed, boolean complex) {
+    protected <T> T decideWhichKindOfComplexClassIsNeeded(Class<?> c, String seed, boolean complex) {
         if (Collection.class.isAssignableFrom(c)) {
             return (T) invokeCollectionInstance(c, seed);
         } else if (Map.class.isAssignableFrom(c)) {
@@ -118,7 +118,7 @@ public class TestDataProvider {
      * @param seed The seed which should be used for generating seeded data
      * @return An instance of the provided class
      */
-    private <T> T invokeArrayInstance(Class c, String seed) {
+    private <T> T invokeArrayInstance(Class<?> c, String seed) {
         Object objects = Array.newInstance(c.getComponentType(), LIST_ARRAY_ITEM_COUNT);
         for (int i = 0; i < Array.getLength(objects); i++) {
             Array.set(objects, i, fill(c.getComponentType(), seed + i, false));
@@ -134,8 +134,8 @@ public class TestDataProvider {
      * @param seed The seed which should be used for generating seeded data
      * @return An instance of the provided class
      */
-    private Collection invokeCollectionInstance(Class c, String seed) {
-        Collection instance;
+    private Collection<?> invokeCollectionInstance(Class<?> c, String seed) {
+        Collection<?> instance;
 
         // https://static.javatpoint.com/images/java-collection-hierarchy.png
         if (c.equals(List.class) || c.equals(Queue.class)) {
@@ -162,8 +162,8 @@ public class TestDataProvider {
      * @param seed The seed which should be used for generating seeded data
      * @return An instance of the provided class
      */
-    private Map invokeMapInstance(Class c, String seed) {
-        Map instance;
+    private Map<?, ?> invokeMapInstance(Class<?> c, String seed) {
+        final Map<?, ?> instance;
 
         // https://static.javatpoint.com/images/core/java-map-hierarchy.png
         if (!c.equals(SortedMap.class) && c.equals(Map.class)) {
@@ -192,7 +192,7 @@ public class TestDataProvider {
      * @throws IllegalAccessException    is thrown if the access to the class, field, method or constructor is not allowed.
      * @throws InvocationTargetException is thrown when the called method throws an exception.
      */
-    public <T> T fillMutableWithNull(Class c) throws IllegalAccessException, InvocationTargetException {
+    public <T> T fillMutableWithNull(Class<?> c) throws IllegalAccessException, InvocationTargetException {
         Object instance = fill(c, "123", false);
 
         for (Method method : GetterIsSetterExtractor.getSetter(c)) {
@@ -214,8 +214,8 @@ public class TestDataProvider {
         providerMap.putAll(customMap);
     }
 
-    private <T> T invokeComplexClass(Class c, String seed, boolean tryComplexConstructorFirst) {
-        for (Constructor constructor : getSortedConstructors(c, tryComplexConstructorFirst)) {
+    private <T> T invokeComplexClass(Class<?> c, String seed, boolean tryComplexConstructorFirst) {
+        for (Constructor<?> constructor : getSortedConstructors(c, tryComplexConstructorFirst)) {
             if (Arrays.stream(constructor.getParameterTypes()).noneMatch(aClass -> aClass.equals(c))) {
                 try {
                     return invokeComplexConstructorWithProviderData(seed, tryComplexConstructorFirst, constructor);
@@ -233,7 +233,7 @@ public class TestDataProvider {
     }
 
     public <T> T invokeComplexConstructorWithProviderData(String seed, boolean tryComplexConstructorFirst,
-                                                          Constructor constructor)
+                                                          Constructor<?> constructor)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
         // try create a arguments array which can be used to invoke the constructor
         Object[] args = IntStream.range(0, constructor.getParameterCount())

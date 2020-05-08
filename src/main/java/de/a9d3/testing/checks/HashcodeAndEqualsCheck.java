@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class HashcodeAndEqualsCheck implements CheckInterface {
     private static final Logger LOGGER = Logger.getLogger(HashcodeAndEqualsCheck.class.getName());
 
-    private TestDataProvider provider;
+    private final TestDataProvider provider;
 
     /**
      * HashCode and equals methods compare the states of two objects with each other.
@@ -30,7 +30,7 @@ public class HashcodeAndEqualsCheck implements CheckInterface {
         this.provider = provider;
     }
 
-    private static boolean defaultObjectsShouldBeEqualToAnother(Class c, Object a, Object b) {
+    private static boolean defaultObjectsShouldBeEqualToAnother(Class<?> c, Object a, Object b) {
         try {
             if (!(areEqual(a, b) && haveEqualHashCode(c, a, b))) {
                 CheckHelperFunctions.logFailedCheckStep(LOGGER, "Default object should equal",
@@ -49,7 +49,7 @@ public class HashcodeAndEqualsCheck implements CheckInterface {
         return a.equals(b);
     }
 
-    private static boolean haveEqualHashCode(Class c, Object a, Object b)
+    private static boolean haveEqualHashCode(Class<?> c, Object a, Object b)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method hashCode = c.getMethod("hashCode");
 
@@ -57,7 +57,7 @@ public class HashcodeAndEqualsCheck implements CheckInterface {
     }
 
     @Override
-    public boolean check(Class c) {
+    public boolean check(Class<?> c) {
         List<Method> setterList = GetterIsSetterExtractor.getSetter(c).stream()
                 // try to generate data for each setter, filter out which do not work
                 .filter(this::filterForFillableData).collect(Collectors.toList());
@@ -94,7 +94,7 @@ public class HashcodeAndEqualsCheck implements CheckInterface {
         return true;
     }
 
-    private boolean checkIfEqualsAndHashcodeReactToSetter(Class c, Object a, Object b, int iter, Method mySetter) {
+    private boolean checkIfEqualsAndHashcodeReactToSetter(Class<?> c, Object a, Object b, int iter, Method mySetter) {
         try {
             CheckHelperFunctions.executeSetter(provider, mySetter, a, iter);
 
