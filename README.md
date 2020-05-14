@@ -1,3 +1,8 @@
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/Mixermachine/base-test/feature/new_logo/img/base-test-logo.svg" width="30%">
+  </p>
+
 # base-test &middot; [![Travis build](https://api.travis-ci.com/Mixermachine/base-test.svg?branch=master)](https://travis-ci.com/Mixermachine/base-test) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Mixermachine_base-test&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mixermachine_base-test) [![Maven Central](https://img.shields.io/maven-central/v/de.a9d3.testing/base-test)](https://search.maven.org/artifact/de.a9d3.testing/base-test)
 
 This project can perform some basic checks for your Java project so you don't have to, making it possible to reach a very high test coverage without writing repetitiv test cases.
