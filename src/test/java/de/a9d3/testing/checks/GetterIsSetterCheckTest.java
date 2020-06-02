@@ -26,4 +26,19 @@ public class GetterIsSetterCheckTest {
     public void negativeTest() {
         assertFalse(check.check(GetterIsSetterCheckNegativeTestClass.class));
     }
+
+    @Test
+    public void regexPositiveMatchTest() {
+        // Exclude faulty getter/setter
+        check = new GetterIsSetterCheck("getD");
+        assertTrue(check.check(GetterIsSetterCheckNegativeTestClass.class));
+    }
+
+    @Test
+    public void regexNegativeMatchTest() {
+        // Exclude something non faulty but still keep faulty getter/setter
+        check = new GetterIsSetterCheck("getA");
+        assertFalse(check.check(GetterIsSetterCheckNegativeTestClass.class));
+    }
+
 }

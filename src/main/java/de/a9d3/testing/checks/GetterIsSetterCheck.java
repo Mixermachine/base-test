@@ -52,7 +52,7 @@ public class GetterIsSetterCheck implements CheckInterface {
 
         List<MethodTuple> tuples = Stream
                 .concat(getterSetterMatcher.match(c).stream(), isSetterMatcher.match(c).stream())
-                .filter(tuple -> !(pattern.matcher(tuple.getA().getName()).matches() &&
+                .filter(tuple -> !(pattern.matcher(tuple.getA().getName()).matches() ||
                         pattern.matcher(tuple.getB().getName()).matches()))
                 .collect(Collectors.toList());
 
