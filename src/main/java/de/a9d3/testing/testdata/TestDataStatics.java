@@ -51,19 +51,16 @@ public final class TestDataStatics {
         return map;
     }
 
-    public static Map<String, Function<String, Object>> getPrimitiveWrapperLinkMap() {
-        Map<String, Function<String, Object>> map = new HashMap<>();
-
-        map.put(Boolean.class.getName(), map.get(boolean.class.getName()));
-        map.put(Character.class.getName(), map.get(char.class.getName()));
-        map.put(Byte.class.getName(), map.get(byte.class.getName()));
-        map.put(Short.class.getName(), map.get(short.class.getName()));
-        map.put(Integer.class.getName(), map.get(int.class.getName()));
-        map.put(Long.class.getName(), map.get(long.class.getName()));
-        map.put(Float.class.getName(), map.get(float.class.getName()));
-        map.put(Double.class.getName(), map.get(double.class.getName()));
-
-        return map;
+    // Needs a reference parameter to existing map as it reuses existing primitive definitions
+    public static void addPrimitiveWrapperLinksToMap(Map<String, Function<String, Object>> map) {
+        map.put(Boolean.class.getName(), x -> map.get(boolean.class.getName()).apply(x));
+        map.put(Character.class.getName(), x -> map.get(char.class.getName()).apply(x));
+        map.put(Byte.class.getName(), x -> map.get(byte.class.getName()).apply(x));
+        map.put(Short.class.getName(), x -> map.get(short.class.getName()).apply(x));
+        map.put(Integer.class.getName(), x -> map.get(int.class.getName()).apply(x));
+        map.put(Long.class.getName(), x -> map.get(long.class.getName()).apply(x));
+        map.put(Float.class.getName(), x -> map.get(float.class.getName()).apply(x));
+        map.put(Double.class.getName(), x -> map.get(double.class.getName()).apply(x));
     }
 
     public static Map<String, Function<String, Object>> getDefaultComplexMap() {
@@ -88,16 +85,17 @@ public final class TestDataStatics {
 
     public static Map<String, Function<String, Object>> getCompleteDefaultMap() {
         Map<String, Function<String, Object>> map = getDefaultPrimitiveMap();
-        map.putAll(getPrimitiveWrapperLinkMap());
         map.putAll(getDefaultComplexMap());
 
+        addPrimitiveWrapperLinksToMap(map);
         return map;
     }
 
     public static Map<String, Function<String, Object>> getCompleteSeededMap() {
         Map<String, Function<String, Object>> map = getSeededPrimitiveMap();
-        map.putAll(getPrimitiveWrapperLinkMap());
         map.putAll(getSeededComplexMap());
+
+        addPrimitiveWrapperLinksToMap(map);
 
         return map;
     }
