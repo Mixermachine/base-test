@@ -48,10 +48,12 @@ public class TestDataProviderTest {
 
     @Test
     public void charTest() {
-        provider.fill(char.class, "123", false); // should not throw
+        Character pChar = provider.fill(char.class, "123", false); // should not throw
 
         Character npChar = provider.fill(Character.class, "123", false);
         assertNotNull(npChar);
+
+        assertEquals(pChar, npChar);
 
         testManyIfNotNull(char.class);
         testManyIfNotNull(Character.class);
@@ -59,10 +61,12 @@ public class TestDataProviderTest {
 
     @Test
     public void byteTest() {
-        provider.fill(byte.class, "123", false); // should not throw
+        Byte pByte = provider.fill(byte.class, "123", false); // should not throw
 
         Byte npByte = provider.fill(Byte.class, "123", false);
         assertNotNull(npByte);
+
+        assertEquals(pByte, npByte);
 
         testManyIfNotNull(byte.class);
         testManyIfNotNull(Byte.class);
@@ -70,10 +74,12 @@ public class TestDataProviderTest {
 
     @Test
     public void shortTest() {
-        provider.fill(short.class, "123", false); // should not throw
+        Short pShort = provider.fill(short.class, "123", false); // should not throw
 
         Short npShort = provider.fill(Short.class, "123", false);
         assertNotNull(npShort);
+
+        assertEquals(pShort, npShort);
 
         testManyIfNotNull(short.class);
         testManyIfNotNull(Short.class);
@@ -81,10 +87,12 @@ public class TestDataProviderTest {
 
     @Test
     public void intTest() {
-        provider.fill(int.class, "123", false);
+        Integer pInteger = provider.fill(int.class, "123", false);
 
         Integer npInteger = provider.fill(Integer.class, "123", false);
         assertNotNull(npInteger);
+
+        assertEquals(pInteger, npInteger);
 
         testManyIfNotNull(int.class);
         testManyIfNotNull(Integer.class);
@@ -92,10 +100,12 @@ public class TestDataProviderTest {
 
     @Test
     public void longTest() {
-        provider.fill(long.class, "123", false);
+        Long pLong = provider.fill(long.class, "123", false);
 
         Long npLong = provider.fill(Long.class, "123", false);
         assertNotNull(npLong);
+
+        assertEquals(pLong, npLong);
 
         testManyIfNotNull(long.class);
         testManyIfNotNull(Long.class);
@@ -103,10 +113,12 @@ public class TestDataProviderTest {
 
     @Test
     public void floatTest() {
-        provider.fill(float.class, "123", false);
+        Float pFloat = provider.fill(float.class, "123", false);
 
         Float npFloat = provider.fill(Float.class, "123", false);
         assertNotNull(npFloat);
+
+        assertEquals(pFloat, npFloat);
 
         testManyIfNotNull(float.class);
         testManyIfNotNull(Float.class);
@@ -114,10 +126,12 @@ public class TestDataProviderTest {
 
     @Test
     public void doubleTest() {
-        provider.fill(double.class, "123", false);
+        Double pDouble = provider.fill(double.class, "123", false);
 
         Double npDouble = provider.fill(Double.class, "123", false);
         assertNotNull(npDouble);
+
+        assertEquals(pDouble, npDouble);
 
         testManyIfNotNull(double.class);
         testManyIfNotNull(Double.class);
