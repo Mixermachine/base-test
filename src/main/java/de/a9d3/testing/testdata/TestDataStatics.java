@@ -1,6 +1,7 @@
 package de.a9d3.testing.testdata;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -70,6 +71,7 @@ public final class TestDataStatics {
 
         map.put(String.class.getName(), x -> "");
         map.put(Instant.class.getName(), x -> Instant.ofEpochSecond(0));
+        map.put(Date.class.getName(), x -> Date.from(Instant.ofEpochSecond(0)));
 
         return map;
     }
@@ -79,6 +81,7 @@ public final class TestDataStatics {
 
         map.put(String.class.getName(), x -> UUID.nameUUIDFromBytes(x.getBytes()).toString());
         map.put(Instant.class.getName(), x -> Instant.ofEpochSecond(x.hashCode()));
+        map.put(Date.class.getName(), x -> Date.from(Instant.ofEpochSecond(x.hashCode())));
 
         return map;
     }
