@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
@@ -250,5 +251,25 @@ public class TestDataProviderTest {
         provider.addCustomMappings(map);
 
         assertEquals(checkChar, provider.fill(Character.class, "123", false));
+    }
+
+    @Test
+    public void regressionDateTest() throws InterruptedException {
+        // referencing https://github.com/Mixermachine/base-test/issues/66
+        provider = TestDataProvider.getDefaultTestDataProvider();
+        assertTrue("Test failed for defaultTestDataProvider", checkIfTwoDatesAreEqualIfProducedWithDelay(provider));
+
+        provider = TestDataProvider.getSeededTestDataProvider();
+        assertTrue("Test failed for defaultTestDataProvider", checkIfTwoDatesAreEqualIfProducedWithDelay(provider));
+    }
+
+    private boolean checkIfTwoDatesAreEqualIfProducedWithDelay(TestDataProvider customProvider) throws InterruptedException {
+        Supplier<Date> supplier = () -> customProvider.fill(Date.class, "123", false);
+
+        Date date1 = supplier.get();
+        Thread.sleep(1);
+        Date date2 = supplier.get();
+
+        return date1.equals(date2);
     }
 }
